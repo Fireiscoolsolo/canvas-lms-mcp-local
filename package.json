@@ -1,0 +1,21 @@
+{
+  "name": "canvas-mcp-local",
+  "version": "1.0.0",
+  "description": "Canvas LMS MCP server (local stdio edition) - 209 tools for students",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "canvas-mcp-local": "index.js"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "dotenv": "^16.4.5",
+    "zod": "^4.6.5"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "canvas": {
+      "command": "node",
+      "args": ["C:/Users/YOUR-NAME/Documents/canvas-lms-mcp-local/index.js"]
+    }
+  }
+}
