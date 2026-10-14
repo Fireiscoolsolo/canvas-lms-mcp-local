@@ -1,15 +1,43 @@
 {
-  "name": "canvas-mcp-local",
+  "name": "canvas-lms-mcp-local",
   "version": "1.0.0",
-  "description": "Canvas LMS MCP server (local stdio edition) - 209 tools for students",
+  "description": "Student-focused Canvas LMS MCP server: 209 tools for grades, deadlines, submissions and study planning. Runs locally over stdio.",
+  "mcpName": "io.github.Fireiscoolsolo/canvas-lms-mcp-local",
   "type": "module",
   "main": "index.js",
   "bin": {
-    "canvas-mcp-local": "index.js"
+    "canvas-lms-mcp-local": "index.js"
   },
+  "files": [
+    "index.js",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "start": "node index.js"
   },
+  "keywords": [
+    "mcp",
+    "mcp-server",
+    "model-context-protocol",
+    "canvas",
+    "canvas-lms",
+    "instructure",
+    "lms",
+    "students",
+    "education",
+    "study-planner",
+    "ai-assistant"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Fireiscoolsolo/canvas-lms-mcp-local.git"
+  },
+  "homepage": "https://fireiscoolsolo.github.io/canvas-lms-mcp-local/",
+  "bugs": {
+    "url": "https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/issues"
+  },
+  "license": "MIT",
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.30.0",
     "dotenv": "^16.4.5",
