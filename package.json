@@ -8,14 +8,16 @@
   "bin": {
     "canvas-lms-mcp-local": "index.js"
   },
-  "files": [
-    "index.js",
-    "README.md",
-    "LICENSE"
-  ],
-  "scripts": {
-    "start": "node index.js"
-  },
+"scripts": {
+  "start": "node index.js",
+  "test": "node --test"
+},
+"files": [
+  "index.js",
+  "grade-calculators.js",
+  "README.md",
+  "LICENSE"
+],
   "keywords": [
     "mcp",
     "mcp-server",
