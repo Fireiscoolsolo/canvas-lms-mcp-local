@@ -224,45 +224,37 @@ footer{border-top:1px solid var(--border);padding:36px 0;color:var(--muted);font
 <section id="setup"><div class="wrap">
   <div class="eyebrow">Setup</div>
   <h2>Up and running in 5 minutes</h2>
-  <p class="sub">You need <a href="https://nodejs.org">Node.js 18+</a> and a Canvas account. That's all.</p>
+  <p class="sub">You need <a href="https://nodejs.org">Node.js 18+</a> and a Canvas account. There's nothing to download yourself: your AI app fetches the server with <code>npx</code>.</p>
   <div class="steps">
-    <div class="step"><div>
-      <h3>Download and install</h3>
-<pre><button class="copy">Copy</button>git clone https://github.com/Fireiscoolsolo/canvas-lms-mcp-local.git
-cd canvas-lms-mcp-local
-npm install</pre>
-    </div></div>
     <div class="step"><div>
       <h3>Create a Canvas token</h3>
       <p>In Canvas, go to <b>Account → Settings → Approved Integrations → + New Access Token</b>. Copy it right away, because Canvas only shows it once.</p>
     </div></div>
     <div class="step"><div>
-      <h3>Create <code>.env</code> next to <code>index.js</code></h3>
-<pre><button class="copy">Copy</button>CANVAS_API_TOKEN=your_token_here
-CANVAS_BASE_URL=https://yourschool.instructure.com</pre>
-      <p class="tip">🪟 On Windows, make sure the file is named <code>.env</code>, not <code>.env.txt</code>.</p>
-    </div></div>
-    <div class="step"><div>
-      <h3>Connect your AI app</h3>
+      <h3>Add it to your AI app</h3>
       <div class="tabs" role="tablist">
         <button role="tab" aria-selected="true" data-tab="desktop">Desktop apps</button>
         <button role="tab" aria-selected="false" data-tab="code">Command line</button>
       </div>
       <div class="panel" id="tab-desktop">
-        <p style="margin-top:10px">Open your app's MCP config file (usually under <b>Settings → Developer</b> or <b>MCP servers</b>) and add this entry, using the <b>full path</b> to <code>index.js</code>:</p>
+        <p style="margin-top:10px">Open your app's MCP config file (usually under <b>Settings → Developer</b> or <b>MCP servers</b>) and add this entry with your token and school address:</p>
 <pre><button class="copy">Copy</button>{
   "mcpServers": {
     "canvas": {
-      "command": "node",
-      "args": ["C:/Users/YOUR-NAME/Documents/canvas-lms-mcp-local/index.js"]
+      "command": "npx",
+      "args": ["-y", "canvas-lms-mcp-local"],
+      "env": {
+        "CANVAS_API_TOKEN": "your_token_here",
+        "CANVAS_BASE_URL": "https://yourschool.instructure.com"
+      }
     }
   }
 }</pre>
         <p class="tip">Then <b>fully quit</b> the app and reopen it. On Windows, use the tray icon → Quit; on macOS, press ⌘Q.</p>
       </div>
       <div class="panel" id="tab-code" hidden>
-<pre><button class="copy">Copy</button>node "/absolute/path/to/canvas-lms-mcp-local/index.js"</pre>
-        <p class="tip">Register this command as a <b>stdio</b> MCP server named <code>canvas</code> in your client, then check its MCP status to confirm it's connected.</p>
+<pre><button class="copy">Copy</button>npx -y canvas-lms-mcp-local</pre>
+        <p class="tip">Register this command as a <b>stdio</b> MCP server named <code>canvas</code>, with <code>CANVAS_API_TOKEN</code> and <code>CANVAS_BASE_URL</code> set in its environment.</p>
       </div>
     </div></div>
     <div class="step"><div>
@@ -270,12 +262,13 @@ CANVAS_BASE_URL=https://yourschool.instructure.com</pre>
       <p>Ask your assistant: <b>“Run test_connection.”</b> Then try <i>“What's due this week?”</i></p>
     </div></div>
   </div>
+  <p class="tip" style="margin-top:18px">Prefer running from source? See <a href="https://github.com/Fireiscoolsolo/canvas-lms-mcp-local#-quick-start">the README</a>.</p>
 </div></section>
 
 <section id="config"><div class="wrap">
   <div class="eyebrow">Configuration</div>
   <h2>Settings</h2>
-  <p class="sub">Everything goes in <code>.env</code>. Only the first two are required.</p>
+  <p class="sub">Set these in the <code>env</code> block of your config (or in <code>.env</code> if you run from source). Only the first two are required.</p>
   <div class="tbl"><table>
     <tr><th>Variable</th><th>Default</th><th>Description</th></tr>
     <tr><td><code>CANVAS_API_TOKEN</code> <span class="tag">required</span></td><td>—</td><td>Your Canvas personal access token</td></tr>
@@ -318,8 +311,9 @@ CANVAS_BASE_URL=https://yourschool.instructure.com</pre>
   <div class="tbl"><table>
     <tr><th>Symptom</th><th>Fix</th></tr>
     <tr><td>Canvas tools don't appear</td><td>Check that the config is valid JSON and the path is absolute, then <b>fully quit</b> and reopen your AI app</td></tr>
-    <tr><td><code>spawn node ENOENT</code></td><td>Use Node's full path as <code>command</code>, e.g. <code>"C:/Program Files/nodejs/node.exe"</code></td></tr>
-    <tr><td>“CANVAS_API_TOKEN is not set”</td><td>Put <code>.env</code> in the same folder as <code>index.js</code>, and check it isn't named <code>.env.txt</code></td></tr>
+    <tr><td><code>spawn npx ENOENT</code></td><td>Install <a href="https://nodejs.org">Node.js</a> and restart the app. If it still fails, use the full path as <code>command</code>, e.g. <code>"C:/Program Files/nodejs/npx.cmd"</code></td></tr>
+    <tr><td>The first start is slow</td><td><code>npx</code> downloads the package the first time. Later starts are fast</td></tr>
+    <tr><td>“CANVAS_API_TOKEN is not set”</td><td>Add it to the <code>env</code> block of the <code>canvas</code> entry in your config</td></tr>
     <tr><td>Canvas returns 401</td><td>Your token expired. Create a new one</td></tr>
     <tr><td>Where are the logs?</td><td>In your AI app's MCP log folder. Every line from this server starts with <code>[canvas-mcp]</code></td></tr>
   </table></div>

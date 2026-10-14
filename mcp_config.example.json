@@ -1,8 +1,12 @@
 {
   "mcpServers": {
     "canvas": {
-      "command": "node",
-      "args": ["C:/Users/YOUR-NAME/Documents/canvas-lms-mcp-local/index.js"]
+      "command": "npx",
+      "args": ["-y", "canvas-lms-mcp-local"],
+      "env": {
+        "CANVAS_API_TOKEN": "your_token_here",
+        "CANVAS_BASE_URL": "https://yourschool.instructure.com"
+      }
     }
   }
 }

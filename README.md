@@ -9,6 +9,7 @@
 
 209 tools · One config file · Nothing exposed to the internet
 
+[![npm](https://img.shields.io/npm/v/canvas-lms-mcp-local?logo=npm&color=CB3837)](https://www.npmjs.com/package/canvas-lms-mcp-local)
 [![Node.js](https://img.shields.io/badge/node-%E2%89%A518-339933?logo=node.js&logoColor=white)](https://nodejs.org)
 [![MCP](https://img.shields.io/badge/MCP-stdio-2563EB)](https://modelcontextprotocol.io)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -53,48 +54,33 @@ No web server, no ports, nothing to keep running. Your AI app starts the server 
 
 ## 🚀 Quick start
 
-**You need:** [Node.js 18+](https://nodejs.org) and a Canvas account.
+**You need:** [Node.js 18+](https://nodejs.org) and a Canvas account. There's nothing to download yourself: your AI app fetches the server with `npx`.
 
-### 1. Download and install
-
-```bash
-git clone https://github.com/Fireiscoolsolo/canvas-lms-mcp-local.git
-cd canvas-lms-mcp-local
-npm install
-```
-
-### 2. Create a Canvas access token
+### 1. Create a Canvas access token
 In Canvas, go to **Account → Settings → Approved Integrations → + New Access Token**. Canvas only shows the token once, so copy it right away. Student tokens usually expire after 30–120 days.
 
-### 3. Create your `.env`
-Copy `.env.example` to `.env` **in the same folder as `index.js`** and fill in two lines:
-
-```ini
-CANVAS_API_TOKEN=your_token_here
-CANVAS_BASE_URL=https://yourschool.instructure.com
-```
-
-> 🪟 **Windows tip:** make sure the file is named `.env`, not `.env.txt`. To check, turn on *View → File name extensions* in File Explorer.
-
-### 4. Connect your AI app
+### 2. Add it to your AI app
 
 <details open>
 <summary><b>Desktop apps</b></summary>
 
 1. Open your app's MCP config file. It's usually under **Settings → Developer** or **Settings → MCP servers**, and most apps use an `mcpServers` JSON block.
-2. Add the `canvas` entry below, using the **full path** to `index.js` on your computer (see [`mcp_config.example.json`](mcp_config.example.json)):
+2. Add this `canvas` entry with your token and school address (also in [`mcp_config.example.json`](mcp_config.example.json)):
 
    ```json
    {
      "mcpServers": {
        "canvas": {
-         "command": "node",
-         "args": ["C:/Users/YOUR-NAME/Documents/canvas-lms-mcp-local/index.js"]
+         "command": "npx",
+         "args": ["-y", "canvas-lms-mcp-local"],
+         "env": {
+           "CANVAS_API_TOKEN": "your_token_here",
+           "CANVAS_BASE_URL": "https://yourschool.instructure.com"
+         }
        }
      }
    }
    ```
-   Forward slashes work on Windows. If you use backslashes, double them: `C:\\Users\\...`. On macOS, the path looks like `/Users/you/canvas-lms-mcp-local/index.js`.
 
 3. **Fully quit the app**: on Windows, right-click the tray icon and choose **Quit**; on macOS, press ⌘Q. Then reopen it. Closing the window isn't enough.
 </details>
@@ -102,21 +88,41 @@ CANVAS_BASE_URL=https://yourschool.instructure.com
 <details>
 <summary><b>Command-line clients</b></summary>
 
+Register this command as a **stdio** MCP server named `canvas`, with `CANVAS_API_TOKEN` and `CANVAS_BASE_URL` set in its environment:
+
 ```bash
-node "/absolute/path/to/canvas-lms-mcp-local/index.js"
+npx -y canvas-lms-mcp-local
 ```
 
-Register that command as a **stdio** MCP server named `canvas` in your client, then check its MCP status to confirm it's connected.
+Then check your client's MCP status to confirm it's connected.
 </details>
 
-### 5. Try it
+### 3. Try it
 Ask your assistant: **"Run test_connection."** It checks your identity, courses, planner, inbox and missing submissions, and reports any features your school has disabled.
 
 Then try: *"What's due this week?"*, *"What do I need on the final to get a B?"* or *"Which missing assignments hurt my grade the most?"*
 
+<details>
+<summary><b>Prefer running from source?</b></summary>
+
+```bash
+git clone https://github.com/Fireiscoolsolo/canvas-lms-mcp-local.git
+cd canvas-lms-mcp-local
+npm install
+```
+
+Copy `.env.example` to `.env` **in the same folder as `index.js`**, fill in your token and school address, then point your config at the file instead of npx:
+
+```json
+{ "mcpServers": { "canvas": { "command": "node", "args": ["C:/Users/YOUR-NAME/Documents/canvas-lms-mcp-local/index.js"] } } }
+```
+
+Forward slashes work on Windows. On macOS, the path looks like `/Users/you/canvas-lms-mcp-local/index.js`. On Windows, make sure the file is named `.env`, not `.env.txt`. To check, turn on *View → File name extensions* in File Explorer.
+</details>
+
 ## ⚙️ Configuration
 
-All settings go in `.env`, next to `index.js`. You can also put them in an `"env": { ... }` block in your app's MCP config.
+Put settings in the `env` block of your config, as in step 2. If you run from source, you can use `.env` next to `index.js` instead.
 
 | Variable | Required | Default | Description |
 |---|:-:|---|---|
@@ -169,8 +175,9 @@ This is a study and organization tool. It helps you see deadlines, understand yo
 | Symptom | Fix |
 |---|---|
 | Canvas tools don't appear in your app | Check that the config is valid JSON and the path to `index.js` is absolute, then **fully quit** and reopen the app |
-| `spawn node ENOENT` / "node" not found | Use Node's full path as `command`, e.g. `"C:/Program Files/nodejs/node.exe"` |
-| "CANVAS_API_TOKEN is not set" | Make sure `.env` is in the same folder as `index.js` and isn't named `.env.txt` |
+| `spawn npx ENOENT` / "npx" not found | Install [Node.js](https://nodejs.org), then restart the app. If it still fails, use the full path as `command`, e.g. `"C:/Program Files/nodejs/npx.cmd"` |
+| The first start is slow | `npx` downloads the package the first time. Later starts are fast |
+| "CANVAS_API_TOKEN is not set" | Add it to the `env` block of the `canvas` entry in your config. If you run from source, check that `.env` sits next to `index.js` and isn't named `.env.txt` |
 | Canvas returns 401 | Your token expired. Create a new one (step 2) |
 | Changes to `index.js` don't take effect | Restart your AI app, because tool lists are loaded when it connects |
 | Where are the logs? | In your AI app's MCP log folder. Every line from this server starts with `[canvas-mcp]` |
