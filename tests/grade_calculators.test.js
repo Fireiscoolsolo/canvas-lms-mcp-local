@@ -1,20 +1,20 @@
-import test from "node:test";
-import assert from "node:assert/strict";
+import test from 'node:test';
+import assert from 'node:assert/strict';
 
 import {
   calculateGradeBreakdown,
   calculateNeededScore,
   formatWhatIfGrade
-} from "../grade-calculators.js";
+} from '../grade-calculators.js';
 
-test("calculates weighted grade contribution", () => {
+test('calculates weighted grade contribution', () => {
   const groups = [{
     id: 1,
-    name: "Assignments",
+    name: 'Assignments',
     group_weight: 40,
     assignments: [{
       id: 101,
-      name: "Homework",
+      name: 'Homework',
       points_possible: 100
     }]
   }];
@@ -22,11 +22,11 @@ test("calculates weighted grade contribution", () => {
   const submissions = [{
     assignment_id: 101,
     score: 80,
-    workflow_state: "graded"
+    workflow_state: 'graded'
   }];
 
   const course = {
-    name: "Software Engineering",
+    name: 'Software Engineering',
     enrollments: []
   };
 
@@ -35,8 +35,7 @@ test("calculates weighted grade contribution", () => {
   assert.equal(result.groups[0].weighted_contribution, 32);
 });
 
-
-test("detects impossible grade target", () => {
+test('detects impossible grade target', () => {
   const groups = [{
     group_weight: 0,
     assignments: [
@@ -45,7 +44,7 @@ test("detects impossible grade target", () => {
         points_possible: 100,
         submission: {
           score: 0,
-          workflow_state: "graded"
+          workflow_state: 'graded'
         }
       },
       {
@@ -60,56 +59,54 @@ test("detects impossible grade target", () => {
 
   assert.equal(
     result.verdict,
-    "Not reachable even with perfect scores on everything remaining."
+    'Not reachable even with perfect scores on everything remaining.'
   );
 });
 
-
-test("reports drop-lowest rules without applying them locally", () => {
+test('reports drop-lowest rules without applying them locally', () => {
   const rules = { drop_lowest: 1, drop_highest: 0, never_drop: [] };
 
   const groups = [{
     id: 1,
-    name: "Assignments",
+    name: 'Assignments',
     group_weight: 40,
     rules,
     assignments: [
-      { id: 101, name: "Task 1", points_possible: 100 },
-      { id: 102, name: "Task 2", points_possible: 100 }
+      { id: 101, name: 'Task 1', points_possible: 100 },
+      { id: 102, name: 'Task 2', points_possible: 100 }
     ]
   }];
 
   const submissions = [
-    { assignment_id: 101, score: 80, workflow_state: "graded" },
-    { assignment_id: 102, score: 20, workflow_state: "graded" }
+    { assignment_id: 101, score: 80, workflow_state: 'graded' },
+    { assignment_id: 102, score: 20, workflow_state: 'graded' }
   ];
 
   const result = calculateGradeBreakdown(
     groups,
     submissions,
-    { name: "Math", enrollments: [] }
+    { name: 'Math', enrollments: [] }
   );
 
   assert.deepEqual(result.groups[0].drop_rules, rules);
   assert.equal(result.groups[0].group_percent, 50);
 });
 
-
-test("calculates remaining scores for ungraded assignments", () => {
+test('calculates remaining scores for ungraded assignments', () => {
   const groups = [{
     group_weight: 0,
     assignments: [
       {
         id: 1,
-        name: "Quiz",
+        name: 'Quiz',
         points_possible: 100,
-        submission: { score: 70, workflow_state: "graded" }
+        submission: { score: 70, workflow_state: 'graded' }
       },
       {
         id: 2,
-        name: "Final Exam",
+        name: 'Final Exam',
         points_possible: 100,
-        submission: { score: null, workflow_state: "submitted" }
+        submission: { score: null, workflow_state: 'submitted' }
       }
     ]
   }];
@@ -122,20 +119,19 @@ test("calculates remaining scores for ungraded assignments", () => {
   assert.equal(result.remaining_items.length, 1);
 });
 
-
-test("excludes excused assignments from remaining work", () => {
+test('excludes excused assignments from remaining work', () => {
   const groups = [{
     group_weight: 0,
     assignments: [
       {
         id: 1,
-        name: "Quiz",
+        name: 'Quiz',
         points_possible: 100,
-        submission: { score: 80, workflow_state: "graded" }
+        submission: { score: 80, workflow_state: 'graded' }
       },
       {
         id: 2,
-        name: "Excused Quiz",
+        name: 'Excused Quiz',
         points_possible: 100,
         submission: { score: null, excused: true }
       }
@@ -149,8 +145,7 @@ test("excludes excused assignments from remaining work", () => {
   assert.equal(result.remaining_items.length, 0);
 });
 
-
-test("formats Canvas what-if grade response correctly", () => {
+test('formats Canvas what-if grade response correctly', () => {
   const response = {
     grades: [{
       current: 85,
@@ -170,6 +165,3 @@ test("formats Canvas what-if grade response correctly", () => {
   assert.deepEqual(result.final_by_group, { Assignments: 85 });
   assert.deepEqual(result.submission, { id: 123 });
 });
-
-
-

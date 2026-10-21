@@ -35,11 +35,7 @@ import { z } from 'zod';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import {
-  calculateGradeBreakdown,
-  calculateNeededScore,
-  formatWhatIfGrade
-} from "./grade-calculators.js";
+import { calculateGradeBreakdown, calculateNeededScore, formatWhatIfGrade } from './grade-calculators.js';
 import dotenv from 'dotenv';
 
 const SCRIPT_DIR = path.dirname(fileURLToPath(import.meta.url));
@@ -780,40 +776,24 @@ tool({
   name: 'get_course_grade_breakdown', group: E,
   description: 'Full grade math for one course: every assignment group with its weight, your points earned vs possible per group, and the weighted contribution of each. This is what Canvas shows you, decomposed.',
   schema: { course_id: COURSE },
-handler: async (a) => {
-  const [groups, subs, course] = [
-    await canvas.paginate(
-      `/courses/${a.course_id}/assignment_groups`,
-      { include: ["assignments"] },
-      { max: 50 }
-    ),
-    await canvas.paginate(
-      `/courses/${a.course_id}/students/submissions`,
-      { student_ids: ["self"], per_page: 100 },
-      { max: 300 }
-    ),
-    await canvas.get(
-      `/courses/${a.course_id}`,
-      { include: ["total_scores"] }
-    ),
-  ];
-
-  return ok(calculateGradeBreakdown(groups, subs, course));
-},
+  handler: async (a) => {
+    const [groups, subs, course] = [
+      await canvas.paginate(`/courses/${a.course_id}/assignment_groups`, { include: ['assignments'] }, { max: 50 }),
+      await canvas.paginate(`/courses/${a.course_id}/students/submissions`, { student_ids: ['self'], per_page: 100 }, { max: 300 }),
+      await canvas.get(`/courses/${a.course_id}`, { include: ['total_scores'] }),
+    ];
+    return ok(calculateGradeBreakdown(groups, subs, course));
+  },
 });
 
 tool({
   name: 'what_if_grade', group: E, write: true,
   description: 'Enter a hypothetical score on an assignment and get your fully recalculated course grade back, with assignment-group weighting and drop rules applied by Canvas itself. This writes a student-only what-if score to the submission; it is NOT a real grade and nobody else sees it. Reverse with reset_what_if_grades. Canvas flags this as expensive, so use it sparingly.',
   schema: { submission_id: ID.describe('Submission ID (from get_my_submission or list_my_submissions)'), score: z.number().describe('Hypothetical score to test') },
-handler: async (a) => {
-  const response = await canvas.put(
-    `/submissions/${a.submission_id}/what_if_grades`,
-    { student_entered_score: a.score }
-  );
-
-  return ok(formatWhatIfGrade(response, a.score));
-},
+  handler: async (a) => {
+    const r = await canvas.put(`/submissions/${a.submission_id}/what_if_grades`, { student_entered_score: a.score });
+    return ok(formatWhatIfGrade(r, a.score));
+  },
 });
 tool({ name: 'reset_what_if_grades', group: E, write: true, description: 'Clear all what-if scores in a course and recalculate back to your real grades.', schema: { course_id: COURSE }, handler: async (a) => ok(await canvas.put(`/courses/${a.course_id}/what_if_grades/reset`), 'What-if scores cleared.') });
 
@@ -828,18 +808,10 @@ tool({
   name: 'compute_needed_score', group: E,
   description: 'Pure math, no writes: given a target final percentage, compute what average you need on remaining ungraded work in a course. Accounts for assignment-group weighting.',
   schema: { course_id: COURSE, target_percent: z.number().describe('Target final grade percentage, e.g. 90') },
-handler: async (a) => {
-  const groups = await canvas.paginate(
-    `/courses/${a.course_id}/assignment_groups`,
-    { include: ["assignments", "submission"] },
-    { max: 50 }
-  );
-
-return ok(
-  calculateNeededScore(groups, a.target_percent, a.course_id)
-);
-
-},
+  handler: async (a) => {
+    const groups = await canvas.paginate(`/courses/${a.course_id}/assignment_groups`, { include: ['assignments', 'submission'] }, { max: 50 });
+    return ok(calculateNeededScore(groups, a.target_percent, a.course_id));
+  },
 });
 
 tool({
