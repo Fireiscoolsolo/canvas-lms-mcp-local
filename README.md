@@ -10,6 +10,9 @@
 209 tools · One config file · Nothing exposed to the internet
 
 [![npm](https://img.shields.io/npm/v/canvas-lms-mcp-local?logo=npm&color=CB3837)](https://www.npmjs.com/package/canvas-lms-mcp-local)
+[![npm downloads](https://img.shields.io/npm/dt/canvas-lms-mcp-local?label=npm%20downloads&logo=npm&color=CB3837)](https://www.npmjs.com/package/canvas-lms-mcp-local)
+[![npm downloads per month](https://img.shields.io/npm/dm/canvas-lms-mcp-local?label=npm%2Fmonth&color=CB3837)](https://npm-stat.com/charts.html?package=canvas-lms-mcp-local)
+[![Release downloads](https://img.shields.io/github/downloads/Fireiscoolsolo/canvas-lms-mcp-local/total?label=release%20downloads&logo=github)](https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases)
 [![Node.js](https://img.shields.io/badge/node-%E2%89%A518-339933?logo=node.js&logoColor=white)](https://nodejs.org)
 [![MCP](https://img.shields.io/badge/MCP-stdio-2563EB)](https://modelcontextprotocol.io)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
