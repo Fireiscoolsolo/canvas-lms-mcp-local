@@ -1,5 +1,5 @@
 {
-  "version": "0.3.0",
-  "url": "https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/download/v1.1.0/CanvasMCPInstallerAssistant-Setup-0.3.0.exe",
-  "notes": "New free Optional features guide: set up phone alerts (ntfy) or Discord alerts, send a test alert, and see the new built-in prompts, attachments, file reading and GPA."
+  "version": "0.3.1",
+  "url": "https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/download/v1.1.0/CanvasMCPInstallerAssistant-Setup-0.3.1.exe",
+  "notes": "A fresh look: new icons and logo throughout the app. Also fixes a stray \"null\" that showed on the Auto install and Optional features pages."
 }
