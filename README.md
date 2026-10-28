@@ -1,5 +1,5 @@
 > [!TIP]
-> **Want it on your phone, on the web, or across several computers?** Go to the **[🌐 Remote Edition →](https://github.com/Fireiscoolsolo/canvas-lms-mcp-server)**. It has the same 209 tools, served over a password-protected ngrok tunnel with automatic failover between computers.
+> **Want it on your phone, on the web, or across several computers?** Go to the **[🌐 Remote Edition →](https://github.com/Fireiscoolsolo/canvas-lms-mcp-server)**. It has the same 211 tools, served over a password-protected ngrok tunnel with automatic failover between computers.
 
 <div align="center">
 
@@ -7,7 +7,7 @@
 
 **Use Canvas from your AI assistant on your own computer. No tunnel, no passwords, no background service.**
 
-209 tools · One config file · Nothing exposed to the internet
+211 tools · One config file · Nothing exposed to the internet
 
 [![npm](https://img.shields.io/npm/v/canvas-lms-mcp-local?logo=npm&color=CB3837)](https://www.npmjs.com/package/canvas-lms-mcp-local)
 [![npm downloads](https://img.shields.io/npm/dt/canvas-lms-mcp-local?label=npm%20downloads&logo=npm&color=CB3837)](https://www.npmjs.com/package/canvas-lms-mcp-local)
@@ -43,17 +43,18 @@
 
 ## ✨ Highlights
 
-- **📊 Grade intelligence**: `what_if_grade`, `compute_needed_score`, `grade_impact_ranking`, full weighted breakdowns
+- **📊 Grade intelligence**: `what_if_grade`, `compute_needed_score`, `grade_impact_ranking`, `calculate_gpa`, full weighted breakdowns
 - **📅 Planning**: `get_week_ahead`, `semester_snapshot`, `study_priority_ranking`, cross-course missing work in one call
 - **📝 Submissions**: submit text, URLs and files, with a dry-run preview first
 - **💬 Discussions & inbox**: read whole threads in one request and message instructors
-- **📁 Content**: files, pages, modules, lecture captions and full `.imscc` course export
+- **📁 Content**: read lecture PDFs, Word docs and slides with `read_course_file`, plus pages, modules, captions and full `.imscc` course export
+- **⚡ Prompts and attachments**: one-click prompts like *Plan my week* and *Prep me for an exam*, and attach a syllabus or assignment to a chat
 
 ## 🧭 How it works
 
 ```
  Your AI app (MCP client)      ──stdio──►  node index.js  ──HTTPS──►  your school's Canvas API
-        (starts the server)              (209 tools, runs only
+        (starts the server)              (211 tools, runs only
                                           while your app is open)
 ```
 
@@ -150,21 +151,30 @@ Put settings in the `env` block of your config, as in step 2. If you run from so
 
 | Group | Count | Highlights |
 |---|:-:|---|
-| Identity | 24 | `check_token_expiry`, `get_rate_limit_status`, custom-data storage |
+| Identity | 25 | `check_token_expiry`, `get_rate_limit_status`, custom-data storage |
 | Courses | 16 | permissions, nicknames, favorites |
 | Assignments | 12 | `list_missing_submissions`, `get_late_policy` |
 | Submissions | 16 | text, URL and file submission, comments, rubric assessments |
-| Grades | 13 | `what_if_grade`, `compute_needed_score`, `grade_impact_ranking` |
+| Grades | 14 | `what_if_grade`, `compute_needed_score`, `grade_impact_ranking`, `calculate_gpa` |
 | Quizzes | 12 | read-only: dates, attempts, reviews |
 | Discussions | 17 | `get_full_topic_view`, replies, ratings |
 | Inbox | 14 | messaging, `find_recipients`, threads |
 | Calendar | 11 | events, office-hours booking |
-| Content | 33 | files, pages, modules, captions, `.imscc` export |
+| Content | 34 | files, pages, modules, captions, `read_course_file` for PDF, Word and PowerPoint, `.imscc` export |
 | Groups | 11 | group workspaces |
 | Rubrics | 11 | peer reviews |
 | Search | 3 | `smart_search` with keyword fallback |
 | Planning | 11 | `get_week_ahead`, `semester_snapshot`, `study_priority_ranking` |
 | Meta | 4 | `raw_canvas_request` for any endpoint not listed above |
+
+### ⚡ Prompts and attachments
+
+The server also adds these to your AI app's menus. They don't count as tools.
+
+- **Prompts**: *Plan my week*, *What did I miss?*, *Prep me for an exam*, *How are my grades?* and *Catch me up on a course*. Each one tells the assistant which tools to use, and course names autocomplete.
+- **Attachments**: attach a course syllabus, or an assignment due in the next 14 days, to a chat the same way you'd attach a file.
+
+Apps that support MCP prompts and resources, such as Claude Desktop, show them in the **+** menu.
 
 ## 🔐 Security
 
