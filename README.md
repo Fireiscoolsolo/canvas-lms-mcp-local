@@ -1,9 +1,14 @@
 > [!TIP]
-> **Want it on your phone, on the web, or across several computers?** Go to the **[🌐 Remote Edition →](https://github.com/Fireiscoolsolo/canvas-lms-mcp-server)**. It has the same 211 tools, served over a password-protected ngrok tunnel with automatic failover between computers.
+> **Want it on your phone, on the web, or across several computers?** Go to the **[Remote Edition →](https://github.com/Fireiscoolsolo/canvas-lms-mcp-server)**. It has the same 211 tools, served over a password-protected ngrok tunnel with automatic failover between computers.
 
 <div align="center">
 
-# 💻 Canvas LMS MCP: Local Edition
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://fireiscoolsolo.github.io/canvas-lms-mcp-local/logo-dark.png">
+  <img src="https://fireiscoolsolo.github.io/canvas-lms-mcp-local/logo.png" width="128" alt="Canvas LMS MCP: Local Edition logo">
+</picture>
+
+# Canvas LMS MCP: Local Edition
 
 **Use Canvas from your AI assistant on your own computer. No tunnel, no passwords, no background service.**
 
@@ -22,7 +27,7 @@
 [![Website](https://img.shields.io/badge/docs-website-0EA5E9)](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 
-[Website](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/) · [Quick start](#-quick-start) · [Configuration](#%EF%B8%8F-configuration) · [Tools](#-tools) · [Troubleshooting](#-troubleshooting)
+[Website](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/) · [Quick start](#quick-start) · [Configuration](#configuration) · [Tools](#tools) · [Troubleshooting](#troubleshooting)
 
 </div>
 
@@ -30,9 +35,9 @@
 
 ---
 
-## 🤔 Local or Remote?
+## Local or Remote?
 
-| | 💻 **Local** (this repo) | 🌐 [**Remote**](https://github.com/Fireiscoolsolo/canvas-lms-mcp-server) |
+| | **Local** (this repo) | [**Remote**](https://github.com/Fireiscoolsolo/canvas-lms-mcp-server) |
 |---|---|---|
 | Works with | Desktop and command-line MCP clients **on this computer** | Any MCP client that supports remote servers, **on any device** |
 | When it runs | Only while your AI app is open, because the app starts it | Always on, in the background |
@@ -41,16 +46,16 @@
 | Multiple computers | Install it separately on each one | Built-in automatic failover between computers |
 | Setup time | About 5 minutes | About 15 minutes, plus about 5 per extra computer |
 
-## ✨ Highlights
+## Highlights
 
-- **📊 Grade intelligence**: `what_if_grade`, `compute_needed_score`, `grade_impact_ranking`, `calculate_gpa`, full weighted breakdowns
-- **📅 Planning**: `get_week_ahead`, `semester_snapshot`, `study_priority_ranking`, cross-course missing work in one call
-- **📝 Submissions**: submit text, URLs and files, with a dry-run preview first
-- **💬 Discussions & inbox**: read whole threads in one request and message instructors
-- **📁 Content**: read lecture PDFs, Word docs and slides with `read_course_file`, plus pages, modules, captions and full `.imscc` course export
-- **⚡ Prompts and attachments**: one-click prompts like *Plan my week* and *Prep me for an exam*, and attach a syllabus or assignment to a chat
+- **Grade intelligence**: `what_if_grade`, `compute_needed_score`, `grade_impact_ranking`, `calculate_gpa`, full weighted breakdowns
+- **Planning**: `get_week_ahead`, `semester_snapshot`, `study_priority_ranking`, cross-course missing work in one call
+- **Submissions**: submit text, URLs and files, with a dry-run preview first
+- **Discussions & inbox**: read whole threads in one request and message instructors
+- **Content**: read lecture PDFs, Word docs and slides with `read_course_file`, plus pages, modules, captions and full `.imscc` course export
+- **Prompts and attachments**: one-click prompts like *Plan my week* and *Prep me for an exam*, and attach a syllabus or assignment to a chat
 
-## 🧭 How it works
+## How it works
 
 ```
  Your AI app (MCP client)      ──stdio──►  node index.js  ──HTTPS──►  your school's Canvas API
@@ -60,7 +65,7 @@
 
 No web server, no ports, nothing to keep running. Your AI app starts the server when it opens and stops it when it closes.
 
-## 🚀 Quick start
+## Quick start
 
 > [!NOTE]
 > **Rather click than type?** Download the **[Canvas MCP Installer Assistant for Windows](https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/download/v1.1.0/CanvasMCPInstallerAssistant-Setup-0.3.0.exe)** (115 MB). It walks you through these steps with pictures and checks each one as you go, for both the Local and Remote editions.
@@ -133,21 +138,21 @@ Copy `.env.example` to `.env` **in the same folder as `index.js`**, fill in your
 Forward slashes work on Windows. On macOS, the path looks like `/Users/you/canvas-lms-mcp-local/index.js`. On Windows, make sure the file is named `.env`, not `.env.txt`. To check, turn on *View → File name extensions* in File Explorer.
 </details>
 
-## ⚙️ Configuration
+## Configuration
 
 Put settings in the `env` block of your config, as in step 2. If you run from source, you can use `.env` next to `index.js` instead.
 
 | Variable | Required | Default | Description |
 |---|:-:|---|---|
-| `CANVAS_API_TOKEN` | ✅ | — | Your Canvas personal access token |
-| `CANVAS_BASE_URL` | ✅ | — | e.g. `https://yourschool.instructure.com` |
+| `CANVAS_API_TOKEN` | Yes | — | Your Canvas personal access token |
+| `CANVAS_BASE_URL` | Yes | — | e.g. `https://yourschool.instructure.com` |
 | `CANVAS_ALLOW_WRITES` | | `true` | `false` = read-only mode |
 | `CANVAS_PROFILE` | | `full` | `core` = curated subset of tools |
 | `CANVAS_CACHE_TTL` | | `60` | Response cache time in seconds |
 | `CANVAS_TIMEZONE` | | system | IANA time zone for due-date math |
 | `CANVAS_DOWNLOAD_DIR` | | `canvas-downloads` next to `index.js` | Where download tools save files |
 
-## 🧰 Tools
+## Tools
 
 | Group | Count | Highlights |
 |---|:-:|---|
@@ -167,7 +172,7 @@ Put settings in the `env` block of your config, as in step 2. If you run from so
 | Planning | 11 | `get_week_ahead`, `semester_snapshot`, `study_priority_ranking` |
 | Meta | 4 | `raw_canvas_request` for any endpoint not listed above |
 
-### ⚡ Prompts and attachments
+### Prompts and attachments
 
 The server also adds these to your AI app's menus. They don't count as tools.
 
@@ -176,7 +181,7 @@ The server also adds these to your AI app's menus. They don't count as tools.
 
 Apps that support MCP prompts and resources, such as Claude Desktop, show them in the **+** menu.
 
-## 🔐 Security
+## Security
 
 - **Nothing is exposed:** the server doesn't listen on any port. Only the app that started it can talk to it, through a private pipe.
 - **Confirmation gate:** tools that send, submit, post or delete return a preview first and only act when called with `confirm: true`.
@@ -185,14 +190,14 @@ Apps that support MCP prompts and resources, such as Claude Desktop, show them i
 
 > **Never commit** `.env`. It's already listed in `.gitignore`. See [SECURITY.md](SECURITY.md).
 
-## 🎓 Responsible use
+## Responsible use
 
 This is a study and organization tool. It helps you see deadlines, understand your grades and plan your week. It never takes quizzes, and nothing is sent or submitted until you've seen a preview and confirmed it.
 
 - Follow your school's academic integrity and acceptable-use policies. Some schools restrict personal API tokens or third-party tools.
 - Want zero risk of accidental changes? Set `CANVAS_ALLOW_WRITES=false` for read-only mode.
 
-## 🛠️ Troubleshooting
+## Troubleshooting
 
 | Symptom | Fix |
 |---|---|
@@ -206,6 +211,6 @@ This is a study and organization tool. It helps you see deadlines, understand yo
 
 **Known limits:** a student token can't reach admin endpoints, gradebook history, course analytics or quiz statistics. `smart_search` is a Canvas beta feature and often returns 404.
 
-## 📄 License
+## License
 
 [MIT](LICENSE). This project isn't affiliated with Instructure.
