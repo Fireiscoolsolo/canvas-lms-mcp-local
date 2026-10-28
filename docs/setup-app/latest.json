@@ -1,5 +1,5 @@
 {
-  "version": "0.2.3",
-  "url": "https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/download/v1.0.3/CanvasMCPInstallerAssistant-Setup-0.2.3.exe",
-  "notes": "Works on school networks and with antivirus web protection, retries network blips, and explains connection problems clearly."
+  "version": "0.3.0",
+  "url": "https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/download/v1.1.0/CanvasMCPInstallerAssistant-Setup-0.3.0.exe",
+  "notes": "New free Optional features guide: set up phone alerts (ntfy) or Discord alerts, send a test alert, and see the new built-in prompts, attachments, file reading and GPA."
 }
