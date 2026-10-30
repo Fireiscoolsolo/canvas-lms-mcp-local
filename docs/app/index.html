@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Canvas MCP Installer Assistant</title>
+<meta name="description" content="A free Windows app that connects Claude to your Canvas account, with pictures and a check after every step. Then ask Claude what's due, what you need on the final, or which missing assignment hurts your grade most.">
+<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="apple-touch-icon" href="../icon.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Canvas MCP Installer Assistant: Canvas in Claude, no terminal needed">
+<meta property="og:description" content="A free Windows app that connects Claude to your Canvas account step by step. Ask what's due, what you need on the final, and more.">
+<meta property="og:url" content="https://fireiscoolsolo.github.io/canvas-lms-mcp-local/app/">
+<meta property="og:image" content="https://fireiscoolsolo.github.io/canvas-lms-mcp-local/app/img/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f9fafc; --surface:#ffffff; --surface-2:#eff2f7; --text:#151a23; --muted:#5e6878;
+  --border:#e0e5ee; --accent:#5b4bdb; --accent-2:#2563eb; --accent-soft:#ecebff; --ok:#15803d;
+  --shadow:0 1px 2px rgba(15,23,42,.04),0 8px 24px rgba(15,23,42,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1118; --surface:#151b25; --surface-2:#1b2330; --text:#e8eef8; --muted:#9aa6b8;
+    --border:#263043; --accent:#8b7dff; --accent-2:#60a5fa; --accent-soft:#2a2650; --ok:#4ade80;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0d1118; --surface:#151b25; --surface-2:#1b2330; --text:#e8eef8; --muted:#9aa6b8;
+  --border:#263043; --accent:#8b7dff; --accent-2:#60a5fa; --accent-soft:#2a2650; --ok:#4ade80;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.65 Inter,system-ui,-apple-system,Segoe UI,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none} a:hover{text-decoration:underline}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+nav{position:sticky;top:0;z-index:10;backdrop-filter:saturate(1.4) blur(12px);background:color-mix(in srgb,var(--bg) 82%,transparent);border-bottom:1px solid var(--border)}
+nav .wrap{display:flex;align-items:center;gap:20px;height:60px}
+.brand{font-weight:800;color:var(--text);display:flex;gap:8px;align-items:center;letter-spacing:-.01em;white-space:nowrap}
+.brand:hover{text-decoration:none}
+.brand img{border-radius:7px}
+nav .links{margin-left:auto;display:flex;gap:18px;align-items:center}
+nav .links a{color:var(--muted);font-size:.93rem;font-weight:500;white-space:nowrap}
+nav .links a:hover{color:var(--text);text-decoration:none}
+.theme{background:none;border:1px solid var(--border);color:var(--text);border-radius:8px;width:34px;height:34px;cursor:pointer;font-size:15px}
+@media (max-width:720px){nav .links a.hide-sm{display:none}nav .links{gap:14px}.brand span{display:none}}
+.hero{padding:72px 0 56px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:-40% -10% auto;height:520px;background:radial-gradient(closest-side,var(--accent-soft),transparent);z-index:-1}
+.pill{display:inline-flex;gap:8px;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:6px 14px;font-size:.85rem;color:var(--muted)}
+.pill b{color:var(--accent)}
+h1{font-size:clamp(2.2rem,5.6vw,3.7rem);line-height:1.07;letter-spacing:-.035em;margin:22px 0 18px;font-weight:800}
+h1 .grad{background:linear-gradient(90deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lede{font-size:1.15rem;color:var(--muted);max-width:660px;margin:0 auto 30px}
+.cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:10px;font-weight:600;border:1px solid var(--border);color:var(--text);background:var(--surface);transition:transform .15s}
+.btn:hover{text-decoration:none;transform:translateY(-1px)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn .v{opacity:.8;font-weight:500}
+.note{color:var(--muted);font-size:.86rem;margin-top:14px}
+.shot{display:block;width:100%;height:auto;border-radius:14px;border:1px solid var(--border);box-shadow:var(--shadow);background:var(--surface)}
+.hero .shot{max-width:900px;margin:44px auto 0}
+section{padding:72px 0;border-top:1px solid var(--border)}
+.eyebrow{color:var(--accent);font-weight:700;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase}
+h2{font-size:clamp(1.6rem,3.4vw,2.2rem);letter-spacing:-.025em;margin:8px 0 12px;line-height:1.15}
+.sub{color:var(--muted);max-width:640px;margin:0 0 36px}
+.feature{display:grid;grid-template-columns:1fr 1.35fr;gap:40px;align-items:center;margin:0 0 64px}
+.feature:last-child{margin-bottom:0}
+.feature.flip{grid-template-columns:1.35fr 1fr}
+.feature.flip .text{order:2}
+.feature h3{font-size:1.35rem;letter-spacing:-.015em;margin:0 0 10px}
+.feature p{color:var(--muted);margin:0 0 12px}
+.feature ul{margin:0;padding-left:20px;color:var(--muted)}
+.feature li{margin:4px 0}
+@media (max-width:820px){.feature,.feature.flip{grid-template-columns:1fr;gap:20px}.feature.flip .text{order:0}}
+.compare{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.plan{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;box-shadow:var(--shadow)}
+.plan.here{border:2px solid var(--accent)}
+.plan .badge{display:inline-block;font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--accent);color:#fff;margin-bottom:10px}
+.plan .badge.alt{background:var(--surface-2);color:var(--muted)}
+.plan h3{margin:0 0 4px;font-size:1.3rem}
+.plan > p{margin:0 0 14px;color:var(--muted)}
+.plan ul{list-style:none;margin:0 0 16px;padding:0}
+.plan li{padding:6px 0;border-top:1px solid var(--border);font-size:.94rem}
+.plan li::before{content:"✓";color:var(--ok);font-weight:800;margin-right:10px}
+.repo h3{display:flex;align-items:center;gap:10px}
+.repo .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+details{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin:10px 0}
+summary{cursor:pointer;font-weight:600}
+details p{color:var(--muted);margin:10px 0 2px}
+footer{border-top:1px solid var(--border);padding:36px 0;color:var(--muted);font-size:.9rem;text-align:center}
+.ico{width:1.15em;height:1.15em;vertical-align:-.2em;flex:none}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <a class="brand" href="#"><img src="../icon.png" alt="" width="28" height="28"><span>Canvas MCP Installer Assistant</span></a>
+  <div class="links">
+    <a href="#features" class="hide-sm">Features</a>
+    <a href="#pricing">Free vs $5</a>
+    <a href="#faq" class="hide-sm">FAQ</a>
+    <a href="https://github.com/Fireiscoolsolo/canvas-lms-mcp-local">GitHub</a>
+    <button class="theme" id="theme" aria-label="Toggle theme">◐</button>
+  </div>
+</div></nav>
+
+<header class="hero"><div class="wrap">
+  <span class="pill">Free Windows app · <b>Claude</b> + Canvas</span>
+  <h1>Canvas in Claude,<br><span class="grad">no terminal needed.</span></h1>
+  <p class="lede">The Canvas MCP Installer Assistant connects Claude to your Canvas account with pictures and a check after every step. Then just ask Claude what's due this week, what you need on the final, or which missing assignment hurts your grade most.</p>
+  <div class="cta">
+    <a class="btn primary" data-download href="https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/latest"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 17v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>Download for Windows<span class="v"></span></a>
+    <a class="btn" href="#features">See how it works</a>
+  </div>
+  <p class="note">Windows 10 and 11. Free guides, with an optional $5 one-click setup. It isn't code-signed yet, so if Windows says "Windows protected your PC", click <b>More info</b>, then <b>Run anyway</b>.</p>
+  <img class="shot" src="img/welcome.webp" width="1180" height="760" alt="The app's Welcome page: choose Local or Remote, with things you can ask Claude once it works">
+</div></header>
+
+<section id="features"><div class="wrap">
+  <div class="eyebrow">How it works</div>
+  <h2>Everything you need to get Claude talking to Canvas</h2>
+  <p class="sub">Pick Local (Claude Desktop on this computer, about 5 minutes) or Remote (Claude on the web, desktop and your phone, about 20 minutes).</p>
+
+  <div class="feature">
+    <div class="text">
+      <h3>A picture and a Check button for every step</h3>
+      <p>The free guides walk you through it one step at a time, with real screenshots and commands to copy. Press <b>Check</b> and the app tells you whether that step worked before you move on.</p>
+      <ul><li>Creating your Canvas access token</li><li>Adding Canvas to Claude Desktop</li><li>Remote: ngrok, start at logon and connecting your phone</li></ul>
+    </div>
+    <img class="shot" src="img/guide.webp" width="1180" height="760" loading="lazy" alt="A guide step showing where to create a Canvas access token">
+  </div>
+
+  <div class="feature flip">
+    <div class="text">
+      <h3>Every tool, explained in plain English</h3>
+      <p>The Tool guide lists all 211 things Claude can do with your Canvas, with an example of what to ask for each. Search for grades, due dates, your inbox or quizzes, and copy a question straight into Claude.</p>
+      <ul><li>Labels show what only reads and what changes something</li><li>Anything other people would see shows a preview first</li></ul>
+    </div>
+    <img class="shot" src="img/tool-guide.webp" width="1180" height="760" loading="lazy" alt="The Tool guide searching for grades">
+  </div>
+
+  <div class="feature">
+    <div class="text">
+      <h3>Or let it do every step for you</h3>
+      <p>For a one-time $5, <b>Auto install</b> does the whole setup: paste your school's Canvas address and token, and the app installs what's missing, checks your token and adds Canvas to Claude Desktop.</p>
+      <ul><li><b>Auto update</b> keeps your setup current in one click</li><li><b>Patch version</b> fixes older hand-made setups</li><li>One key works on up to 5 of your computers</li></ul>
+    </div>
+    <img class="shot" src="img/auto-install.webp" width="1180" height="760" loading="lazy" alt="Auto install: fill in your Canvas address and token, then Set it up">
+  </div>
+
+  <div class="feature flip">
+    <div class="text">
+      <h3>Keeps itself up to date</h3>
+      <p>When a new version is out, the app tells you when you open it. Click <b>Update now</b> and it downloads and installs the new version for you. Your unlock and settings are kept.</p>
+    </div>
+    <img class="shot" src="img/update.webp" width="1180" height="760" loading="lazy" alt="The update popup with an Update now button">
+  </div>
+</div></section>
+
+<section id="pricing"><div class="wrap">
+  <div class="eyebrow">Free vs $5</div>
+  <h2>The guides are free. The one-click setup is $5.</h2>
+  <p class="sub">The $5 supports the project. Everything Claude can do with Canvas is the same either way.</p>
+  <div class="compare">
+    <div class="plan here">
+      <span class="badge">Free</span>
+      <h3>Step-by-step guides</h3>
+      <p>Do it yourself, with help at every step.</p>
+      <ul>
+        <li>Guides for the Local and Remote editions</li>
+        <li>Screenshots and commands to copy</li>
+        <li>A Check button that tests each step</li>
+        <li>The Tool guide and fixes for common problems</li>
+      </ul>
+      <a class="btn primary" data-download href="https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/latest">Download for Windows<span class="v"></span></a>
+    </div>
+    <div class="plan">
+      <span class="badge alt">$5 one-time</span>
+      <h3>Auto install</h3>
+      <p>Let the app do every step for you.</p>
+      <ul>
+        <li>Installs Node.js (and ngrok for Remote) if needed</li>
+        <li>Checks your Canvas token</li>
+        <li>Adds Canvas to Claude Desktop, with a backup</li>
+        <li>Remote: settings, test run and start at logon</li>
+        <li>Auto update and Patch version</li>
+        <li>One license key works on up to 5 of your computers</li>
+      </ul>
+      <p class="note" style="margin:0">Buy inside the app. If Auto install doesn't work for you and I can't fix it, you get a full refund within 7 days.</p>
+    </div>
+  </div>
+</div></section>
+
+<section id="source"><div class="wrap">
+  <div class="eyebrow">Open source</div>
+  <h2>The servers are free and open source</h2>
+  <p class="sub">The app sets up one of two MIT-licensed servers. Prefer the terminal, or on a Mac? Follow their READMEs instead.</p>
+  <div class="compare">
+    <div class="plan repo">
+      <h3><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>Local Edition</h3>
+      <p>Runs on your computer for Claude Desktop and other desktop AI apps. Nothing is exposed to the internet.</p>
+      <div class="row"><a class="btn" href="https://github.com/Fireiscoolsolo/canvas-lms-mcp-local">★ View on GitHub</a><a class="btn" href="https://fireiscoolsolo.github.io/canvas-lms-mcp-local/">Docs</a></div>
+    </div>
+    <div class="plan repo">
+      <h3><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>Remote Edition</h3>
+      <p>Your own Canvas server for Claude on the web, desktop and phone, behind a password, with backup computers.</p>
+      <div class="row"><a class="btn" href="https://github.com/Fireiscoolsolo/canvas-lms-mcp-server">★ View on GitHub</a><a class="btn" href="https://fireiscoolsolo.github.io/canvas-lms-mcp-server/">Docs</a></div>
+    </div>
+  </div>
+</div></section>
+
+<section id="faq"><div class="wrap">
+  <div class="eyebrow">FAQ</div>
+  <h2>Questions</h2>
+  <details><summary>Is my Canvas token safe?</summary><p>The app only sends your token to your own school's Canvas, to check that it works, and saves it on your computer in the settings the server uses. There's no tracking or analytics. The servers it installs are open source on GitHub.</p></details>
+  <details><summary>Windows says "Windows protected your PC". Is that normal?</summary><p>Yes. The app isn't code-signed yet, so Windows doesn't recognize it. Click <b>More info</b>, then <b>Run anyway</b>.</p></details>
+  <details><summary>Does it work on a Mac?</summary><p>Not yet. On a Mac, follow the README for the <a href="https://github.com/Fireiscoolsolo/canvas-lms-mcp-local">Local</a> or <a href="https://github.com/Fireiscoolsolo/canvas-lms-mcp-server">Remote</a> edition.</p></details>
+  <details><summary>Which AI apps does it set up?</summary><p>Claude Desktop for the Local Edition, and Claude on the web, desktop and phone for the Remote Edition. Support for more AI apps is coming.</p></details>
+  <details><summary>Is this made by Instructure or Anthropic?</summary><p>No. It's an independent project that works with Canvas and Claude.</p></details>
+  <details><summary>I'm stuck. Where do I get help?</summary><p>The app's Support tab has fixes for common problems and a button that copies your setup info with secrets hidden. You can also email <a href="mailto:fireiscoolsolo@gmail.com">fireiscoolsolo@gmail.com</a> or open an issue on <a href="https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/issues">GitHub</a>.</p></details>
+</div></section>
+
+<footer><div class="wrap">
+  Not affiliated with Instructure or Anthropic · <a href="mailto:fireiscoolsolo@gmail.com">fireiscoolsolo@gmail.com</a> · <a href="https://github.com/Fireiscoolsolo/canvas-lms-mcp-local">Local Edition on GitHub</a> · <a href="https://github.com/Fireiscoolsolo/canvas-lms-mcp-server">Remote Edition on GitHub</a>
+</div></footer>
+
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('theme');
+  try{var s=localStorage.getItem('theme'); if(s) root.setAttribute('data-theme',s);}catch(e){}
+  btn.addEventListener('click',function(){
+    var cur=root.getAttribute('data-theme')||(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+    var next=cur==='dark'?'light':'dark'; root.setAttribute('data-theme',next);
+    try{localStorage.setItem('theme',next);}catch(e){}
+  });
+  // The download buttons always point at the newest installer, from the same file the app checks for updates.
+  fetch('../setup-app/latest.json',{cache:'no-store'}).then(function(r){return r.json();}).then(function(j){
+    if(!j||!j.url) return;
+    document.querySelectorAll('[data-download]').forEach(function(a){
+      a.href=j.url;
+      var v=a.querySelector('.v'); if(v) v.textContent=' (v'+j.version+')';
+    });
+  }).catch(function(){});
+})();
+</script>
+</body>
+</html>
