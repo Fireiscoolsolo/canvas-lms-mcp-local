@@ -1,5 +1,5 @@
 > [!TIP]
-> **Want it on your phone, on the web, or across several computers?** Go to the **[Remote Edition →](https://github.com/Fireiscoolsolo/canvas-lms-mcp-server)**. It has the same 211 tools, served over a password-protected ngrok tunnel with automatic failover between computers.
+> **Want it on your phone, on the web, or across several computers?** Go to the **[Remote Edition →](https://github.com/Fireiscoolsolo/canvas-lms-mcp-server)** ([website](https://fireiscoolsolo.github.io/canvas-lms-mcp-server/)). It has the same 211 tools, served over a password-protected ngrok tunnel with automatic failover between computers.
 
 <div align="center">
 
