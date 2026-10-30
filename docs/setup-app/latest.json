@@ -1,5 +1,5 @@
 {
-  "version": "0.3.2",
-  "url": "https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/download/v1.1.0/CanvasMCPInstallerAssistant-Setup-0.3.2.exe",
-  "notes": "Optional features now has separate Phone alerts, Discord alerts and Built-in extras tabs. From now on the app also tells you with a popup when an update is out."
+  "version": "0.3.3",
+  "url": "https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/download/v1.1.0/CanvasMCPInstallerAssistant-Setup-0.3.3.exe",
+  "notes": "The Local and Remote guides now have real screenshots, and their steps match the latest Claude app. From this version on, Update now installs updates for you: a Command Prompt window closes the app, swaps the installer in your Downloads folder for the new one and runs it."
 }
