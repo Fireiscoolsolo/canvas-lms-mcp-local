@@ -1,5 +1,5 @@
 {
-  "version": "0.3.4",
-  "url": "https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/download/v1.1.0/CanvasMCPInstallerAssistant-Setup-0.3.4.exe",
-  "notes": "New Tool guide in the sidebar: all 211 tools explained in plain English, with an example of what to ask for each, and search."
+  "version": "0.3.5",
+  "url": "https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/download/v1.1.0/CanvasMCPInstallerAssistant-Setup-0.3.5.exe",
+  "notes": "A Share with a classmate button and links to the open-source code on GitHub, on the Welcome page and in Support."
 }
