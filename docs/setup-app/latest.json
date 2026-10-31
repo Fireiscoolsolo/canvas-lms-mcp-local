@@ -1,5 +1,5 @@
 {
-  "version": "0.3.6",
-  "url": "https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/download/v1.1.0/CanvasMCPInstallerAssistant-Setup-0.3.6.exe",
-  "notes": "Works with the ChatGPT desktop app too. Auto install now checks what's already set up so it never undoes another app's setup, and the new Auto remove page takes Canvas off your computer for free."
+  "version": "0.3.7",
+  "url": "https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/download/v1.1.0/CanvasMCPInstallerAssistant-Setup-0.3.7.exe",
+  "notes": "Remote now lets you pick Claude or the ChatGPT desktop app, just like Local: in the Remote guide, and in Auto install, which can add Remote to the ChatGPT app for you."
 }
