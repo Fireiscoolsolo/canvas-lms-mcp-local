@@ -1,5 +1,5 @@
 {
-  "version": "0.3.5",
-  "url": "https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/download/v1.1.0/CanvasMCPInstallerAssistant-Setup-0.3.5.exe",
-  "notes": "A Share with a classmate button and links to the open-source code on GitHub, on the Welcome page and in Support."
+  "version": "0.3.6",
+  "url": "https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/download/v1.1.0/CanvasMCPInstallerAssistant-Setup-0.3.6.exe",
+  "notes": "Works with the ChatGPT desktop app too. Auto install now checks what's already set up so it never undoes another app's setup, and the new Auto remove page takes Canvas off your computer for free."
 }
