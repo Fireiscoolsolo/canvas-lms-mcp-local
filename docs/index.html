@@ -180,7 +180,7 @@ h3 .ico,.rule b .ico{margin-right:7px;color:var(--accent)}
       <h3><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="16" height="12" rx="2"/><path d="M2 20h20l-2-4H4z"/></svg>Local</h3>
       <p>Best if you only need it on one computer.</p>
       <ul>
-        <li>Desktop and command-line MCP clients</li>
+        <li>Claude Desktop, the ChatGPT desktop app and other MCP clients</li>
         <li>Your AI app starts it automatically</li>
         <li>Nothing exposed to the internet</li>
         <li>Needs only Node.js and a Canvas token</li>
@@ -241,6 +241,7 @@ h3 .ico,.rule b .ico{margin-right:7px;color:var(--accent)}
       <h3>Add it to your AI app</h3>
       <div class="tabs" role="tablist">
         <button role="tab" aria-selected="true" data-tab="desktop">Desktop apps</button>
+        <button role="tab" aria-selected="false" data-tab="chatgpt">ChatGPT desktop app</button>
         <button role="tab" aria-selected="false" data-tab="code">Command line</button>
       </div>
       <div class="panel" id="tab-desktop">
@@ -259,6 +260,15 @@ h3 .ico,.rule b .ico{margin-right:7px;color:var(--accent)}
 }</pre>
         <p class="tip">Then <b>fully quit</b> the app and reopen it. On Windows, use the tray icon → Quit; on macOS, press ⌘Q.</p>
       </div>
+      <div class="panel" id="tab-chatgpt" hidden>
+        <p style="margin-top:10px">Open <b>Settings → Plugins</b>, go to the <b>MCPs</b> tab and click <b>Add → Add MCP server</b>. Choose <b>STDIO</b> and fill in the form. On Windows, each argument goes in its own box:</p>
+<pre>Name                   canvas
+Command to launch      cmd
+Arguments              /c   npx   -y   canvas-lms-mcp-local
+Environment variables  CANVAS_API_TOKEN = your_token_here
+                       CANVAS_BASE_URL  = https://yourschool.instructure.com</pre>
+        <p class="tip">Click <b>Save</b>, then start a <b>new chat</b>. Chats that were already open don't pick up new tools.</p>
+      </div>
       <div class="panel" id="tab-code" hidden>
 <pre><button class="copy">Copy</button>npx -y canvas-lms-mcp-local</pre>
         <p class="tip">Register this command as a <b>stdio</b> MCP server named <code>canvas</code>, with <code>CANVAS_API_TOKEN</code> and <code>CANVAS_BASE_URL</code> set in its environment.</p>
@@ -275,7 +285,7 @@ h3 .ico,.rule b .ico{margin-right:7px;color:var(--accent)}
 <section id="app"><div class="wrap">
   <div class="eyebrow">Windows app</div>
   <h2>Canvas MCP Installer Assistant for Windows</h2>
-  <p class="sub">A desktop app that sets up the Local or Remote Edition with Claude Desktop, with pictures and a check after every step. <a href="app/">See screenshots and FAQ →</a></p>
+  <p class="sub">A desktop app that sets up the Local or Remote Edition in Claude or the ChatGPT desktop app, with pictures and a check after every step. <a href="app/">See screenshots and FAQ →</a></p>
   <div class="compare">
     <div class="plan here">
       <span class="badge">Free</span>
@@ -286,6 +296,7 @@ h3 .ico,.rule b .ico{margin-right:7px;color:var(--accent)}
         <li>Screenshots and commands to copy</li>
         <li>A Check button that tests each step</li>
         <li>Fixes for common problems</li>
+        <li>Auto remove: takes Canvas off your computer again</li>
       </ul>
       <a class="btn primary" href="download/"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 17v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>Download for Windows</a>
     </div>
@@ -296,7 +307,8 @@ h3 .ico,.rule b .ico{margin-right:7px;color:var(--accent)}
       <ul>
         <li>Installs Node.js (and ngrok for Remote) if needed</li>
         <li>Checks your Canvas token</li>
-        <li>Adds Canvas to Claude Desktop, with a backup</li>
+        <li>Adds Canvas to Claude Desktop, the ChatGPT desktop app or both, with a backup</li>
+        <li>Checks what's already set up, so it never undoes another app's setup</li>
         <li>Remote: settings, test run and start at logon</li>
         <li>Auto update: one click keeps your setup current, reusing your saved token</li>
         <li>Patch version: switches older, hand-made setups to the updatable version</li>

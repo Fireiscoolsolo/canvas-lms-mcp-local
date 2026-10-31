@@ -33,7 +33,7 @@
 </div>
 
 > [!TIP]
-> **On Windows? Skip the terminal.** The free **[Canvas MCP Installer Assistant](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/app/)** sets this up with pictures and a check after every step, or does every step for you. **[Download for Windows](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/download/)**
+> **On Windows? Skip the terminal.** The free **[Canvas MCP Installer Assistant](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/app/)** sets this up in Claude Desktop or the ChatGPT desktop app with pictures and a check after every step, or does every step for you. **[Download for Windows](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/download/)**
 
 <p align="center"><img src="https://fireiscoolsolo.github.io/canvas-lms-mcp-local/demo.svg" width="760" alt="Example chat: asking what score is needed on the final and what's due this week (sample data)"></p>
 
@@ -43,7 +43,7 @@
 
 | | **Local** (this repo) | [**Remote**](https://github.com/Fireiscoolsolo/canvas-lms-mcp-server) |
 |---|---|---|
-| Works with | Desktop and command-line MCP clients **on this computer** | Any MCP client that supports remote servers, **on any device** |
+| Works with | Claude Desktop, the ChatGPT desktop app and other MCP clients **on this computer** | Any MCP client that supports remote servers, **on any device** |
 | When it runs | Only while your AI app is open, because the app starts it | Always on, in the background |
 | You need | Node.js and a Canvas token | Node.js, a Canvas token, an ngrok account and a password |
 | Internet exposure | **None**: no port is opened | Public HTTPS address, password-protected |
@@ -105,6 +105,22 @@ In Canvas, go to **Account → Settings → Approved Integrations → + New Acce
    ```
 
 3. **Fully quit the app**: on Windows, right-click the tray icon and choose **Quit**; on macOS, press ⌘Q. Then reopen it. Closing the window isn't enough.
+</details>
+
+<details>
+<summary><b>ChatGPT desktop app</b></summary>
+
+1. Open **Settings → Plugins**, go to the **MCPs** tab, then click **Add → Add MCP server**.
+2. Choose **STDIO** and fill in the form. On Windows, each argument goes in its own box:
+
+   | Field | Value |
+   |---|---|
+   | Name | `canvas` |
+   | Command to launch | `cmd` |
+   | Arguments | `/c`, `npx`, `-y`, `canvas-lms-mcp-local` |
+   | Environment variables | `CANVAS_API_TOKEN` = your token<br>`CANVAS_BASE_URL` = `https://yourschool.instructure.com` |
+
+3. Click **Save**, then start a **new chat**. Chats that were already open don't pick up new tools.
 </details>
 
 <details>
