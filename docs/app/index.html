@@ -76,7 +76,7 @@ h2{font-size:clamp(1.6rem,3.4vw,2.2rem);letter-spacing:-.025em;margin:8px 0 12px
 .feature ul{margin:0;padding-left:20px;color:var(--muted)}
 .feature li{margin:4px 0}
 @media (max-width:820px){.feature,.feature.flip{grid-template-columns:1fr;gap:20px}.feature.flip .text{order:0}}
-.compare{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.compare{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))}
 .plan{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;box-shadow:var(--shadow)}
 .plan.here{border:2px solid var(--accent)}
 .plan .badge{display:inline-block;font-size:.72rem;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--accent);color:#fff;margin-bottom:10px}
@@ -109,7 +109,7 @@ footer{border-top:1px solid var(--border);padding:36px 0;color:var(--muted);font
 </div></nav>
 
 <header class="hero"><div class="wrap">
-  <span class="pill">Free Windows app · works with <b>Claude</b> and <b>ChatGPT</b></span>
+  <span class="pill"><span>Free Windows app · works with <b>Claude</b> and <b>ChatGPT</b></span></span>
   <h1>Canvas in your AI,<br><span class="grad">no terminal needed.</span></h1>
   <p class="lede">The Canvas MCP Installer Assistant connects Claude or the ChatGPT desktop app to your Canvas account with pictures and a check after every step. Then just ask what's due this week, what you need on the final, or which missing assignment hurts your grade most.</p>
   <div class="cta">
