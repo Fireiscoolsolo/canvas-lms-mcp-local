@@ -6,12 +6,12 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
-const EXPECTED_TOOLS = 211;
+const EXPECTED_TOOLS = 237;
 
 test('server starts over stdio and lists all tools', { timeout: 30000 }, async () => {
   const child = spawn(process.execPath, [path.join(ROOT, 'index.js')], {
     cwd: ROOT,
-    env: { ...process.env, CANVAS_API_TOKEN: 'test-token', CANVAS_BASE_URL: 'https://example.invalid', CANVAS_MCP_TRANSPORT: 'stdio' },
+    env: { ...process.env, CANVAS_STATE_DIR: path.join(ROOT, 'tests', '.state'), CANVAS_API_TOKEN: 'test-token', CANVAS_BASE_URL: 'https://example.invalid', CANVAS_MCP_TRANSPORT: 'stdio' },
     stdio: ['pipe', 'pipe', 'pipe'],
   });
   let buf = '', nonJson = 0, id = 0;
@@ -47,7 +47,7 @@ test('server starts over stdio and lists all tools', { timeout: 30000 }, async (
 test('offline tools work before a token is set', { timeout: 30000 }, async () => {
   const child = spawn(process.execPath, [path.join(ROOT, 'index.js')], {
     cwd: ROOT,
-    env: { ...process.env, CANVAS_API_TOKEN: '', CANVAS_BASE_URL: '', CANVAS_MCP_TRANSPORT: 'stdio' },
+    env: { ...process.env, CANVAS_STATE_DIR: path.join(ROOT, 'tests', '.state'), CANVAS_API_TOKEN: '', CANVAS_BASE_URL: '', CANVAS_MCP_TRANSPORT: 'stdio' },
     stdio: ['pipe', 'pipe', 'pipe'],
   });
   let buf = '', id = 0;
@@ -81,7 +81,7 @@ test('offline tools work before a token is set', { timeout: 30000 }, async () =>
 test('server offers prompts and attachable Canvas items', { timeout: 60000 }, async () => {
   const child = spawn(process.execPath, [path.join(ROOT, 'index.js')], {
     cwd: ROOT,
-    env: { ...process.env, CANVAS_API_TOKEN: '', CANVAS_BASE_URL: '', CANVAS_MCP_TRANSPORT: 'stdio' },
+    env: { ...process.env, CANVAS_STATE_DIR: path.join(ROOT, 'tests', '.state'), CANVAS_API_TOKEN: '', CANVAS_BASE_URL: '', CANVAS_MCP_TRANSPORT: 'stdio' },
     stdio: ['pipe', 'pipe', 'pipe'],
   });
   let buf = '', id = 0;
@@ -105,7 +105,7 @@ test('server offers prompts and attachable Canvas items', { timeout: 60000 }, as
     child.stdin.write(JSON.stringify({ jsonrpc: '2.0', method: 'notifications/initialized' }) + '\n');
 
     const prompts = await rpc('prompts/list', {});
-    assert.deepEqual(prompts.result.prompts.map((p) => p.name).sort(), ['catch_up_on_course', 'exam_prep', 'grade_check', 'plan_my_week', 'what_did_i_miss']);
+    assert.deepEqual(prompts.result.prompts.map((p) => p.name).sort(), ['catch_up_on_course', 'daily_briefing', 'email_professor', 'exam_prep', 'grade_check', 'on_track_to_pass', 'plan_my_week', 'plan_study_blocks', 'semester_wrap_up', 'start_assignment', 'what_did_i_miss']);
     for (const p of prompts.result.prompts) assert.ok(p.title && p.description, `${p.name} has a title and description`);
 
     const exam = await rpc('prompts/get', { name: 'exam_prep', arguments: { course: 'Biology 101', exam: 'Midterm 2' } });

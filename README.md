@@ -1,5 +1,5 @@
 > [!TIP]
-> **Want it on your phone, on the web, or across several computers?** Go to the **[Remote Edition →](https://github.com/Fireiscoolsolo/canvas-lms-mcp-server)** ([website](https://fireiscoolsolo.github.io/canvas-lms-mcp-server/)). It has the same 211 tools, served over a password-protected ngrok tunnel with automatic failover between computers.
+> **Want it on your phone, on the web, or across several computers?** Go to the **[Remote Edition →](https://github.com/Fireiscoolsolo/canvas-lms-mcp-server)** ([website](https://fireiscoolsolo.github.io/canvas-lms-mcp-server/)). It has the same 237 tools, served over a password-protected tunnel with a status page, phone alerts and automatic failover between computers.
 
 <div align="center">
 
@@ -12,7 +12,7 @@
 
 **Use Canvas from your AI assistant on your own computer. No tunnel, no passwords, no background service.**
 
-211 tools · One config file · Nothing exposed to the internet
+237 tools · One-command setup · Nothing exposed to the internet
 
 [![npm](https://img.shields.io/npm/v/canvas-lms-mcp-local?logo=npm&color=CB3837)](https://www.npmjs.com/package/canvas-lms-mcp-local)
 [![npm downloads](https://img.shields.io/npm/dt/canvas-lms-mcp-local?label=npm%20downloads&logo=npm&color=CB3837)](https://www.npmjs.com/package/canvas-lms-mcp-local)
@@ -28,12 +28,12 @@
 [![Website](https://img.shields.io/badge/docs-website-0EA5E9)](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22)
 
-[Website](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/) · [Quick start](#quick-start) · [Configuration](#configuration) · [Tools](#tools) · [Troubleshooting](#troubleshooting)
+[Website](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/) · [Quick start](#quick-start) · [Configuration](#configuration) · [Tools](#tools) · [Troubleshooting](#troubleshooting) · [Changelog](CHANGELOG.md)
 
 </div>
 
 > [!TIP]
-> **On Windows? Skip the terminal.** The free **[Canvas MCP Installer Assistant](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/app/)** sets this up in Claude Desktop or the ChatGPT desktop app with pictures and a check after every step, or does every step for you. **[Download for Windows](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/download/)**
+> **On Windows? Skip the terminal.** The free **[Canvas MCP Installer Assistant](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/app/)** sets this up in Claude Desktop, the ChatGPT desktop app and other AI apps with pictures and a check after every step, or does every step for you. **[Download for Windows](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/download/)**
 
 <p align="center"><img src="https://fireiscoolsolo.github.io/canvas-lms-mcp-local/demo.svg" width="760" alt="Example chat: asking what score is needed on the final and what's due this week (sample data)"></p>
 
@@ -43,27 +43,29 @@
 
 | | **Local** (this repo) | [**Remote**](https://github.com/Fireiscoolsolo/canvas-lms-mcp-server) |
 |---|---|---|
-| Works with | Claude Desktop, the ChatGPT desktop app and other MCP clients **on this computer** | Any MCP client that supports remote servers, **on any device** |
+| Works with | Claude Desktop, the ChatGPT desktop app, Claude Code, Cursor, VS Code and other MCP clients **on this computer** | Any MCP client that supports remote servers, **on any device** |
 | When it runs | Only while your AI app is open, because the app starts it | Always on, in the background |
-| You need | Node.js and a Canvas token | Node.js, a Canvas token, an ngrok account and a password |
+| You need | Node.js and a Canvas token | Node.js, a Canvas token, an ngrok or Cloudflare account and a password |
 | Internet exposure | **None**: no port is opened | Public HTTPS address, password-protected |
 | Multiple computers | Install it separately on each one | Built-in automatic failover between computers |
-| Setup time | About 5 minutes | About 15 minutes, plus about 5 per extra computer |
+| Setup time | About 2 minutes with `setup`, or 5 by hand | About 15 minutes, plus about 5 per extra computer |
 
 ## Highlights
 
-- **Grade intelligence**: `what_if_grade`, `compute_needed_score`, `grade_impact_ranking`, `calculate_gpa`, full weighted breakdowns
-- **Planning**: `get_week_ahead`, `semester_snapshot`, `study_priority_ranking`, cross-course missing work in one call
-- **Submissions**: submit text, URLs and files, with a dry-run preview first
-- **Discussions & inbox**: read whole threads in one request and message instructors
-- **Content**: read lecture PDFs, Word docs and slides with `read_course_file`, plus pages, modules, captions and full `.imscc` course export
-- **Prompts and attachments**: one-click prompts like *Plan my week* and *Prep me for an exam*, and attach a syllabus or assignment to a chat
+- **Your day and week**: `daily_briefing`, `get_week_ahead`, `semester_snapshot`, cross-course missing work in one call
+- **Planner**: add your own to-do notes, check items off your Canvas To Do list, export deadlines to Google, Apple or Outlook calendars
+- **Study plans**: `study_plan` spreads study time before each deadline around your calendar; `schedule_study_plan` puts it on your Canvas calendar
+- **Grade intelligence**: `final_grade_scenarios` (what you need for each letter, with group weights), `what_if_grade`, `grade_impact_ranking`, `calculate_gpa`
+- **Assignments**: `assignment_brief` gives the instructions, rubric, late policy and linked files in one call
+- **Submissions, discussions and inbox**: submit, post and message, always after you confirm (apps that support it ask you directly)
+- **Content**: read lecture PDFs, Word docs and slides with `read_course_file`, plus pages, modules, captions and full course export
+- **Prompts and attachments**: one-click prompts like *Daily briefing*, *Start this assignment* and *Am I on track to pass?*, and attach a syllabus or assignment to a chat
 
 ## How it works
 
 ```
  Your AI app (MCP client)      ──stdio──►  node index.js  ──HTTPS──►  your school's Canvas API
-        (starts the server)              (211 tools, runs only
+        (starts the server)              (237 tools, runs only
                                           while your app is open)
 ```
 
@@ -76,7 +78,7 @@ No web server, no ports, nothing to keep running. Your AI app starts the server 
 >
 > Windows may show "Windows protected your PC" because the app isn't code-signed yet. Click **More info**, then **Run anyway**.
 
-**You need:** [Node.js 18+](https://nodejs.org) and a Canvas account. There's nothing to download yourself: your AI app fetches the server with `npx`.
+**You need:** [Node.js 18+](https://nodejs.org) (22+ to read PDFs) and a Canvas account.
 
 ### 1. Create a Canvas access token
 In Canvas, go to **Account → Settings → Approved Integrations → + New Access Token**. Canvas only shows the token once, so copy it right away. Student tokens usually expire after 30–120 days.
@@ -84,9 +86,31 @@ In Canvas, go to **Account → Settings → Approved Integrations → + New Acce
 ### 2. Add it to your AI app
 
 <details open>
-<summary><b>Desktop apps</b></summary>
+<summary><b>Easiest: one command (Windows, macOS and Linux)</b></summary>
 
-1. Open your app's MCP config file. It's usually under **Settings → Developer** or **Settings → MCP servers**, and most apps use an `mcpServers` JSON block.
+```bash
+npx canvas-lms-mcp-local setup
+```
+
+It asks for your school's Canvas address and your token, checks they work, then adds Canvas to the apps you pick: **Claude Desktop, the ChatGPT desktop app, Claude Code, Cursor, VS Code, Windsurf, Gemini CLI and LM Studio**. Your old settings are backed up first. It can also keep the token in Windows Credential Manager, the macOS Keychain or the Linux keyring instead of in each app's settings file.
+
+Afterwards, fully quit and reopen your app (the command tells you how for each one).
+</details>
+
+<details>
+<summary><b>Claude Desktop: one-click extension</b></summary>
+
+1. Download **`canvas-lms.mcpb`** from the [latest release](https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/latest).
+2. Open it (double-click, or drag it into Claude Desktop's **Settings → Extensions**).
+3. Click **Install**, then enter your school's Canvas address and your token when Claude asks.
+
+The extension includes everything it needs, so you don't have to install Node.js for it.
+</details>
+
+<details>
+<summary><b>Desktop apps, by hand</b></summary>
+
+1. Open your app's MCP config file. It's usually under **Settings → Developer** or **Settings → MCP servers**, and most apps use an `mcpServers` JSON block. `npx canvas-lms-mcp-local print-config <app>` prints the exact snippet for each app.
 2. Add this `canvas` entry with your token and school address (also in [`mcp_config.example.json`](mcp_config.example.json)):
 
    ```json
@@ -108,7 +132,7 @@ In Canvas, go to **Account → Settings → Approved Integrations → + New Acce
 </details>
 
 <details>
-<summary><b>ChatGPT desktop app</b></summary>
+<summary><b>ChatGPT desktop app, by hand</b></summary>
 
 1. Open **Settings → Plugins**, go to the **MCPs** tab, then click **Add → Add MCP server**.
 2. Choose **STDIO** and fill in the form. On Windows, each argument goes in its own box:
@@ -132,13 +156,15 @@ Register this command as a **stdio** MCP server named `canvas`, with `CANVAS_API
 npx -y canvas-lms-mcp-local
 ```
 
-Then check your client's MCP status to confirm it's connected.
+For Claude Code, `npx canvas-lms-mcp-local setup --apps claude-code` does it for you. Then check your client's MCP status to confirm it's connected.
 </details>
 
 ### 3. Try it
 Ask your assistant: **"Run test_connection."** It checks your identity, courses, planner, inbox and missing submissions, and reports any features your school has disabled.
 
-Then try: *"What's due this week?"*, *"What do I need on the final to get a B?"* or *"Which missing assignments hurt my grade the most?"*
+Then try: *"Give me my daily briefing"*, *"What do I need on the rest of Biology to get a B?"*, *"Plan my study time for the next two weeks"* or *"Explain the Lab 4 assignment and its rubric."*
+
+If something isn't working, run **`npx canvas-lms-mcp-local doctor`**. It checks Node, each app's settings and your token, and says how to fix what it finds.
 
 <details>
 <summary><b>Prefer running from source?</b></summary>
@@ -156,6 +182,8 @@ Copy `.env.example` to `.env` **in the same folder as `index.js`**, fill in your
 ```
 
 Forward slashes work on Windows. On macOS, the path looks like `/Users/you/canvas-lms-mcp-local/index.js`. On Windows, make sure the file is named `.env`, not `.env.txt`. To check, turn on *View → File name extensions* in File Explorer.
+
+The tools live in `core/`, which is shared with the Remote Edition: change them here, then run `npm run sync-core` to copy them across. `npm test` runs every tool against a fake Canvas, so no token is needed.
 </details>
 
 ## Configuration
@@ -164,39 +192,49 @@ Put settings in the `env` block of your config, as in step 2. If you run from so
 
 | Variable | Required | Default | Description |
 |---|:-:|---|---|
-| `CANVAS_API_TOKEN` | Yes | — | Your Canvas personal access token |
+| `CANVAS_API_TOKEN` | Yes* | — | Your Canvas personal access token |
+| `CANVAS_API_TOKEN_FILE` | | — | *Or* the path of a file that holds only the token |
+| `CANVAS_TOKEN_STORE` | | — | *Or* `keychain`: read the token from Windows Credential Manager, the macOS Keychain or the Linux keyring (`setup` saves it there) |
 | `CANVAS_BASE_URL` | Yes | — | e.g. `https://yourschool.instructure.com` |
 | `CANVAS_ALLOW_WRITES` | | `true` | `false` = read-only mode |
-| `CANVAS_PROFILE` | | `full` | `core` = curated subset of tools |
+| `CANVAS_PROFILE` | | `full` | `core` = curated subset of about 50 tools |
+| `CANVAS_TOOLS` | | all | Only these tool groups or tools, e.g. `grades,planner,whoami` (for apps that struggle with many tools) |
+| `CANVAS_DISABLE_TOOLS` | | — | Leave out these tool groups or tools, e.g. `inbox,groups` |
 | `CANVAS_CACHE_TTL` | | `60` | Response cache time in seconds |
-| `CANVAS_TIMEZONE` | | system | IANA time zone for due-date math |
-| `CANVAS_DOWNLOAD_DIR` | | `canvas-downloads` next to `index.js` | Where download tools save files |
+| `CANVAS_TIMEZONE` | | system | IANA time zone for dates |
+| `CANVAS_DOWNLOAD_DIR` | | `Downloads/Canvas` in your home folder | Where download tools save files |
+| `CANVAS_MAX_RESPONSE_CHARS` | | `100000` | Longest answer before it is trimmed |
+
+\* One of `CANVAS_API_TOKEN`, `CANVAS_API_TOKEN_FILE` or `CANVAS_TOKEN_STORE`.
 
 ## Tools
 
 | Group | Count | Highlights |
 |---|:-:|---|
-| Identity | 25 | `check_token_expiry`, `get_rate_limit_status`, custom-data storage |
-| Courses | 16 | permissions, nicknames, favorites |
-| Assignments | 12 | `list_missing_submissions`, `get_late_policy` |
-| Submissions | 16 | text, URL and file submission, comments, rubric assessments |
-| Grades | 14 | `what_if_grade`, `compute_needed_score`, `grade_impact_ranking`, `calculate_gpa` |
+| Identity | 27 | `check_token_expiry`, notification preferences, custom-data storage |
+| Courses | 17 | `course_contacts` (teachers, TAs, office hours), permissions, nicknames |
+| Assignments | 13 | `assignment_brief`, `list_missing_submissions`, `get_late_policy` |
+| Submissions | 17 | text, URL, file and annotation submission, comments, rubric assessments |
+| Grades | 15 | `final_grade_scenarios`, `what_if_grade`, `compute_needed_score`, `grade_impact_ranking`, `calculate_gpa` |
 | Quizzes | 12 | read-only: dates, attempts, reviews |
-| Discussions | 17 | `get_full_topic_view`, replies, ratings |
+| Discussions | 21 | `get_full_topic_view`, replies, school-wide announcements, mark announcements read |
 | Inbox | 14 | messaging, `find_recipients`, threads |
 | Calendar | 11 | events, office-hours booking |
-| Content | 34 | files, pages, modules, captions, `read_course_file` for PDF, Word and PowerPoint, `.imscc` export |
+| Content | 36 | files, pages, modules, captions, ePortfolios, `read_course_file` for PDF, Word and PowerPoint, course export |
 | Groups | 11 | group workspaces |
 | Rubrics | 11 | peer reviews |
 | Search | 3 | `smart_search` with keyword fallback |
-| Planning | 11 | `get_week_ahead`, `semester_snapshot`, `study_priority_ranking` |
+| Planner | 12 | `daily_briefing`, planner notes, `mark_planner_item_done`, `study_plan`, `export_deadlines_ics`, calendar feed |
+| Planning | 13 | `get_week_ahead`, `semester_snapshot`, `study_priority_ranking`, `semester_wrap_up`, `export_all_courses` |
 | Meta | 4 | `raw_canvas_request` for any endpoint not listed above |
+
+Long lists come one page at a time (`limit` and `page`), dates read like "Fri, Nov 7, 11:59 PM (in 2 days)", and Canvas errors are explained with the fix. In your token's last week, answers carry a heads-up so the assistant can remind you to renew it.
 
 ### Prompts and attachments
 
 The server also adds these to your AI app's menus. They don't count as tools.
 
-- **Prompts**: *Plan my week*, *What did I miss?*, *Prep me for an exam*, *How are my grades?* and *Catch me up on a course*. Each one tells the assistant which tools to use, and course names autocomplete.
+- **Prompts**: *Daily briefing*, *Plan my week*, *Plan my study blocks*, *What did I miss?*, *Start this assignment*, *Prep me for an exam*, *How are my grades?*, *Am I on track to pass?*, *Catch me up on a course*, *Draft an email to my professor* and *Semester wrap-up*. Each one tells the assistant which tools to use, and course names autocomplete.
 - **Attachments**: attach a course syllabus, or an assignment due in the next 14 days, to a chat the same way you'd attach a file.
 
 Apps that support MCP prompts and resources, such as Claude Desktop, show them in the **+** menu.
@@ -204,32 +242,37 @@ Apps that support MCP prompts and resources, such as Claude Desktop, show them i
 ## Security
 
 - **Nothing is exposed:** the server doesn't listen on any port. Only the app that started it can talk to it, through a private pipe.
-- **Confirmation gate:** tools that send, submit, post or delete return a preview first and only act when called with `confirm: true`.
-- **Prompt-injection fencing:** text other people wrote is wrapped in `<<<CANVAS_CONTENT>>>` markers and labelled as untrusted.
+- **Confirmation gate:** tools that send, submit, post or delete ask you first. Apps that support it show a confirmation; others get a preview and only act when called with `confirm: true`.
+- **Prompt-injection fencing:** text other people wrote (posts, messages, comments, rubric notes) is wrapped in `<<<CANVAS_CONTENT>>>` markers and labelled as untrusted.
+- **Your token stays private:** it is only sent to your school's Canvas, never written to logs, and can live in your system's password store instead of a config file.
+- **Safe downloads:** file names from Canvas are cleaned, so nothing is written outside the download folder.
 - **No quiz-taking:** quiz attempt endpoints are deliberately not included.
 
 > **Never commit** `.env`. It's already listed in `.gitignore`. See [SECURITY.md](SECURITY.md).
 
 ## Responsible use
 
-This is a study and organization tool. It helps you see deadlines, understand your grades and plan your week. It never takes quizzes, and nothing is sent or submitted until you've seen a preview and confirmed it.
+This is a study and organization tool. It helps you see deadlines, understand your grades and plan your week. It never takes quizzes, and nothing is sent or submitted until you've confirmed it.
 
 - Follow your school's academic integrity and acceptable-use policies. Some schools restrict personal API tokens or third-party tools.
 - Want zero risk of accidental changes? Set `CANVAS_ALLOW_WRITES=false` for read-only mode.
 
 ## Troubleshooting
 
+Start with **`npx canvas-lms-mcp-local doctor`**: it checks everything below and says what to fix.
+
 | Symptom | Fix |
 |---|---|
-| Canvas tools don't appear in your app | Check that the config is valid JSON and the path to `index.js` is absolute, then **fully quit** and reopen the app |
-| `spawn npx ENOENT` / "npx" not found | Install [Node.js](https://nodejs.org), then restart the app. If it still fails, use the full path as `command`, e.g. `"C:/Program Files/nodejs/npx.cmd"` |
+| Canvas tools don't appear in your app | Check that the config is valid JSON, then **fully quit** and reopen the app. `setup` writes it for you |
+| `spawn npx ENOENT` / "npx" not found | Install [Node.js](https://nodejs.org), then restart the app. If it still fails, use the full path as `command`, e.g. `"C:/Program Files/nodejs/npx.cmd"`, or use the Claude Desktop extension, which needs no Node.js |
 | The first start is slow | `npx` downloads the package the first time. Later starts are fast |
-| "CANVAS_API_TOKEN is not set" | Add it to the `env` block of the `canvas` entry in your config. If you run from source, check that `.env` sits next to `index.js` and isn't named `.env.txt` |
-| Canvas returns 401 | Your token expired. Create a new one (step 2) |
-| Changes to `index.js` don't take effect | Restart your AI app, because tool lists are loaded when it connects |
+| "CANVAS_API_TOKEN is not set" | Add it to the `env` block of the `canvas` entry in your config, or run `setup`. If you run from source, check that `.env` sits next to `index.js` and isn't named `.env.txt` |
+| "Your Canvas token was rejected" | Your token expired. Create a new one (step 1) and run `setup` again |
+| Your app struggles with so many tools | Set `CANVAS_TOOLS` to the groups you use, e.g. `grades,planner,assignments`, or `CANVAS_PROFILE=core` |
+| Changes to the code don't take effect | Restart your AI app, because tool lists are loaded when it connects |
 | Where are the logs? | In your AI app's MCP log folder. Every line from this server starts with `[canvas-mcp]` |
 
-**Known limits:** a student token can't reach admin endpoints, gradebook history, course analytics or quiz statistics. `smart_search` is a Canvas beta feature and often returns 404.
+**Known limits:** a student token can't reach admin endpoints, gradebook history, course analytics or quiz statistics. `smart_search` is a Canvas beta feature and often returns 404. Canvas doesn't let other apps add ePortfolio entries.
 
 ## License
 
