@@ -1,6 +1,6 @@
 {
-  "version": "0.4.1",
-  "url": "https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/download/v1.2.0/CanvasMCPInstallerAssistant-Setup-0.4.1.exe",
-  "notes": "Updated pictures in the setup guides.",
-  "sha256": "2b9b8fe10c272f32ba05fa30b2da1fa0bbf3dae053a1caea27ecea3d7ea65447"
+  "version": "0.4.2",
+  "url": "https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/download/v1.2.1/CanvasMCPInstallerAssistant-Setup-0.4.2.exe",
+  "notes": "Adds a Nuclear option to Patch version, and the What's new note now covers every version since the one you last opened.",
+  "sha256": "ad18219c337b24398df7e05cf240153241901779cd4a33c0ce37e924c9aaa507"
 }
