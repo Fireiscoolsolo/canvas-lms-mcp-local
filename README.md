@@ -204,6 +204,7 @@ Put settings in the `env` block of your config, as in step 2. If you run from so
 | `CANVAS_TIMEZONE` | | system | IANA time zone for dates |
 | `CANVAS_DOWNLOAD_DIR` | | `Downloads/Canvas` in your home folder | Where download tools save files |
 | `CANVAS_MAX_RESPONSE_CHARS` | | `100000` | Longest answer before it is trimmed |
+| `CANVAS_IP_FAMILY` | | both | `4` or `6` uses only that kind of address. Worth trying if new connections time out |
 
 \* One of `CANVAS_API_TOKEN`, `CANVAS_API_TOKEN_FILE` or `CANVAS_TOKEN_STORE`.
 
@@ -269,6 +270,7 @@ Start with **`npx canvas-lms-mcp-local doctor`**: it checks everything below and
 | "CANVAS_API_TOKEN is not set" | Add it to the `env` block of the `canvas` entry in your config, or run `setup`. If you run from source, check that `.env` sits next to `index.js` and isn't named `.env.txt` |
 | "Your Canvas token was rejected" | Your token expired. Create a new one (step 1) and run `setup` again |
 | Your app struggles with so many tools | Set `CANVAS_TOOLS` to the groups you use, e.g. `grades,planner,assignments`, or `CANVAS_PROFILE=core` |
+| Reading works but uploads or new connections time out | `doctor`'s Network section times DNS and tests every connection. The server works around a slow DNS lookup by itself, so if a connection still fails, look for a VPN, proxy or firewall |
 | Changes to the code don't take effect | Restart your AI app, because tool lists are loaded when it connects |
 | Where are the logs? | In your AI app's MCP log folder. Every line from this server starts with `[canvas-mcp]` |
 

@@ -37,7 +37,7 @@ function fakeCanvas() {
     res.setHeader('content-type', 'application/json');
     if (auth !== 'Bearer good-token-123') { res.statusCode = 401; return res.end('{"errors":[{"message":"Invalid access token."}]}'); }
     if (req.url.startsWith('/api/v1/users/self')) return res.end('{"id":"5","name":"Alex Example"}');
-    if (req.url.startsWith('/api/v1/users/5/user_generated_tokens')) return res.end(JSON.stringify([{ id: '1', token_hint: 'good-', expires_at: new Date(Date.now() + 40 * 86400000).toISOString() }]));
+    if (req.url.startsWith('/api/v1/users/5/user_generated_tokens')) return res.end(JSON.stringify([{ id: '1', token_hint: 'good-', expires_at: new Date(Date.now() + 39.5 * 86400000).toISOString() }]));
     res.statusCode = 404;
     res.end('{}');
   });

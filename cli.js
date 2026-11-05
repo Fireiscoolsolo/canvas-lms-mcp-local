@@ -9,6 +9,8 @@ import { APPS, PACKAGE, detect, hasCommand, serverEnv, writeEntry, readEntry, sn
 import { normalizeBase } from './core/canvas-client.js';
 import { saveStoredToken, readStoredToken, storeName } from './core/token-store.js';
 import { matchToken, daysLeft } from './core/token-watch.js';
+import { ipFamilyFrom } from './core/config.js';
+import { applyNetworkSettings, reportConnections } from './core/network.js';
 
 const DIR = path.dirname(fileURLToPath(import.meta.url));
 const VERSION = JSON.parse(fs.readFileSync(path.join(DIR, 'package.json'), 'utf8')).version;
@@ -224,6 +226,11 @@ export async function doctor({ fetchImpl = fetch } = {}) {
     if (d !== null && d <= 7) { problems++; warn(`The token expires in ${Math.max(0, Math.ceil(d))} day(s). Make a new one at ${base}/profile/settings, then run setup again.`); }
     else if (d !== null) note(`The token expires ${new Date(r.expires).toDateString()} (${Math.ceil(d)} days).`);
   }
+
+  const schools = [...new Set(sources.map((s) => normalizeBase(s.env.CANVAS_BASE_URL)))].filter((b) => b.startsWith('https:'));
+  if (schools.length) console.log('\nNetwork:');
+  for (const school of schools) await reportConnections(school, { good, bad });
+
   console.log(problems ? `\n${problems} problem${problems === 1 ? '' : 's'} found.` : '\nEverything looks good.');
   return problems ? 1 : 0;
 }
@@ -244,6 +251,7 @@ export async function runCli(argv) {
   const cmd = opts._[0];
   if (opts.version || cmd === 'version' || argv.includes('-v')) { console.log(VERSION); return 0; }
   if (opts.help || cmd === 'help' || argv.includes('-h') || !cmd) { console.log(HELP); return 0; }
+  applyNetworkSettings({ ipFamily: ipFamilyFrom() });
   try {
     if (cmd === 'setup') return await setup(opts);
     if (cmd === 'doctor') return await doctor();
