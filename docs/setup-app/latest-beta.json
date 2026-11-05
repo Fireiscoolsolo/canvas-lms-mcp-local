@@ -1,6 +1,6 @@
 {
-  "version": "0.4.0",
-  "url": "https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/download/v1.2.0/CanvasMCPInstallerAssistant-Setup-0.4.0.exe",
-  "notes": "Your setup checks every app, your token and your server at a glance. Renew my token everywhere, My server with phone-alert settings, Canvas in Cursor, VS Code and more, plus a Prompt library, Search, Backups and dark mode.",
-  "sha256": "f82075336954b1a434e2fb7fd4f1891f4acbb546e9449b490c6aaa43d76fbb37"
+  "version": "0.4.1",
+  "url": "https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/download/v1.2.0/CanvasMCPInstallerAssistant-Setup-0.4.1.exe",
+  "notes": "Updated pictures in the setup guides.",
+  "sha256": "2b9b8fe10c272f32ba05fa30b2da1fa0bbf3dae053a1caea27ecea3d7ea65447"
 }
