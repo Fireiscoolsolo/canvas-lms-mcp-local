@@ -19,6 +19,9 @@ All notable changes to `canvas-lms-mcp-local`. The tools are shared with the Rem
 - **More actions ask first:** `upload_to_my_files`, `upload_submission_file`, `upload_comment_attachment`, `delete_planner_note`, `delete_bookmark`, `update_planner_note`, `update_calendar_event`, `rate_entry`, `create_content_export`, `export_course_archive`, and every write through `raw_canvas_request`.
 - **Fences around other people's text are harder to break.** A fake end marker is now caught in any case, with invisible characters, in full-width or look-alike brackets, or with two brackets instead of three. Text that only starts like a fence is fenced like anything else. Every tool that passes Canvas text straight through now fences the longer fields (descriptions, bodies, messages, captions, rubric and outcome text, quiz items, planner notes) wherever they appear, and text sent to Canvas is refused if it carries any spelling of a marker.
 
+### Fixed
+- **A tool the app stops waiting for stops asking Canvas.** When your AI app cancels a call or the connection drops, a tool that only reads stops before its next Canvas request instead of running to the end. Anything that changes Canvas always finishes, so a submission never stops half way. A read that runs for 20 minutes is stopped and says so.
+
 ## 1.2.1
 
 ### Fixed
