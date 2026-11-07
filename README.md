@@ -196,13 +196,13 @@ Put settings in the `env` block of your config, as in step 2. If you run from so
 | `CANVAS_API_TOKEN_FILE` | | — | *Or* the path of a file that holds only the token |
 | `CANVAS_TOKEN_STORE` | | — | *Or* `keychain`: read the token from Windows Credential Manager, the macOS Keychain or the Linux keyring (`setup` saves it there) |
 | `CANVAS_BASE_URL` | Yes | — | e.g. `https://yourschool.instructure.com` |
-| `CANVAS_ALLOW_WRITES` | | `true` | `false` = read-only mode |
-| `CANVAS_PROFILE` | | `full` | `core` = curated subset of about 50 tools |
+| `CANVAS_ALLOW_WRITES` | | `true` | `false` (or `0`, `no`, `off`) = nothing in Canvas can change. A value it can't read counts as `false`, and tools say so |
+| `CANVAS_PROFILE` | | `full` | `core` = curated subset of about 50 tools. A value it can't read counts as `core` |
 | `CANVAS_TOOLS` | | all | Only these tool groups or tools, e.g. `grades,planner,whoami` (for apps that struggle with many tools) |
 | `CANVAS_DISABLE_TOOLS` | | — | Leave out these tool groups or tools, e.g. `inbox,groups` |
 | `CANVAS_CACHE_TTL` | | `60` | Response cache time in seconds |
 | `CANVAS_TIMEZONE` | | system | IANA time zone for dates |
-| `CANVAS_DOWNLOAD_DIR` | | `Downloads/Canvas` in your home folder | Where download tools save files |
+| `CANVAS_DOWNLOAD_DIR` | | `Downloads/Canvas` in your home folder | Where download tools save files. They can't save anywhere outside it |
 | `CANVAS_MAX_RESPONSE_CHARS` | | `100000` | Longest answer before it is trimmed |
 | `CANVAS_IP_FAMILY` | | both | `4` or `6` uses only that kind of address. Worth trying if new connections time out |
 
@@ -243,11 +243,12 @@ Apps that support MCP prompts and resources, such as Claude Desktop, show them i
 ## Security
 
 - **Nothing is exposed:** the server doesn't listen on any port. Only the app that started it can talk to it, through a private pipe.
-- **Confirmation gate:** tools that send, submit, post or delete ask you first. Apps that support it show a confirmation; others get a preview and only act when called with `confirm: true`.
+- **Confirmation gate:** tools that send, submit, post, upload or delete need confirmation. Apps that can ask you directly always do, and nothing the AI sends can skip that. Other apps get a preview and a one-time token that only works for that exact request, for 5 minutes. The token can't prove you agreed, so keep your AI app's own "ask before running" setting on for these tools.
 - **Prompt-injection fencing:** text other people wrote (posts, messages, comments, rubric notes) is wrapped in `<<<CANVAS_CONTENT>>>` markers and labelled as untrusted.
-- **Your token stays private:** it is only sent to your school's Canvas, never written to logs, and can live in your system's password store instead of a config file.
-- **Safe downloads:** file names from Canvas are cleaned, so nothing is written outside the download folder.
-- **No quiz-taking:** quiz attempt endpoints are deliberately not included.
+- **Your token stays private:** every request is checked, so it can only go to your school's Canvas. It's never written to logs, and can live in your system's password store instead of a config file.
+- **Safe downloads:** files only go in your download folder, never replace another file, and have their names cleaned.
+- **Private files stay private:** uploads refuse `.env` files, keys, sign-in files, and the folders where browsers and AI apps keep their data.
+- **No quiz-taking:** quiz attempt endpoints are deliberately not included, and writes to them are refused for every tool, however the address is written.
 
 > **Never commit** `.env`. It's already listed in `.gitignore`. See [SECURITY.md](SECURITY.md).
 
@@ -256,7 +257,7 @@ Apps that support MCP prompts and resources, such as Claude Desktop, show them i
 This is a study and organization tool. It helps you see deadlines, understand your grades and plan your week. It never takes quizzes, and nothing is sent or submitted until you've confirmed it.
 
 - Follow your school's academic integrity and acceptable-use policies. Some schools restrict personal API tokens or third-party tools.
-- Want zero risk of accidental changes? Set `CANVAS_ALLOW_WRITES=false` for read-only mode.
+- Want to be sure nothing in Canvas changes? Set `CANVAS_ALLOW_WRITES=false` for read-only mode. Downloads still work, into your download folder.
 
 ## Troubleshooting
 

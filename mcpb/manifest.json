@@ -4,7 +4,7 @@
   "display_name": "Canvas LMS",
   "version": "1.2.1",
   "description": "Your Canvas courses in Claude: grades, deadlines, assignments, messages and study plans.",
-  "long_description": "Connects Claude Desktop to your school's Canvas LMS with 237 student tools: what's due this week, your grades and what you need on the rest, assignment instructions and rubrics, announcements and messages, course files (PDF, Word, PowerPoint), a daily briefing, study plans and calendar export. Anything that posts, submits or sends asks you first. Your token stays on this computer and is only sent to your school's Canvas.",
+  "long_description": "Connects Claude Desktop to your school's Canvas LMS with 237 student tools: what's due this week, your grades and what you need on the rest, assignment instructions and rubrics, announcements and messages, course files (PDF, Word, PowerPoint), a daily briefing, study plans and calendar export. Anything that posts, submits or sends goes through a confirmation step first. Your token stays on this computer and is only sent to your school's Canvas.",
   "author": {
     "name": "Fireiscoolsolo",
     "url": "https://github.com/Fireiscoolsolo"
@@ -51,7 +51,7 @@
     "allow_writes": {
       "type": "boolean",
       "title": "Allow submitting, posting and sending",
-      "description": "Lets Claude submit work, post in discussions and send messages, always after asking you. Turn off for read-only.",
+      "description": "Lets Claude submit work, post in discussions and send messages, after a confirmation step. Turn off for read-only.",
       "default": true,
       "required": false
     }
