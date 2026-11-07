@@ -22,6 +22,9 @@ All notable changes to `canvas-lms-mcp-local`. The tools are shared with the Rem
 ### Fixed
 - **A tool the app stops waiting for stops asking Canvas.** When your AI app cancels a call or the connection drops, a tool that only reads stops before its next Canvas request instead of running to the end. Anything that changes Canvas always finishes, so a submission never stops half way. A read that runs for 20 minutes is stopped and says so.
 
+### Releases
+- **A publish from GitHub checks itself first.** Every file that names the version has to agree, the changelog needs a section for it, and the shared tools have to match the other edition. The actions it uses are pinned to exact versions, and the MCP Registry publisher is a fixed release checked against its published checksum. Every test run now also fails if the shared tools differ between the two editions.
+
 ## 1.2.1
 
 ### Fixed
