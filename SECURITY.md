@@ -27,7 +27,6 @@ It needs Node.js 18 or newer. Every change is tested on Node 18, 20, 22 and 24, 
 - **Your AI app and the company that runs it.** They see everything the tools return, and can call any tool that is switched on. A confirmation token shows the request didn't change after the preview, not that you said yes. Keep your app's "ask before running" setting on for tools that send, submit, upload or delete. To switch tools off, use `CANVAS_DISABLE_TOOLS`, or `CANVAS_ALLOW_WRITES=false` for read-only.
 - **Anyone or anything using your computer account.** Malware, or another person signed in as you, can read `.env` and your AI app's settings.
 - **Canvas, your school and Instructure's file storage.** They already hold your data.
-- **A school address that starts with `http://`.** The token would travel unencrypted. Use the `https://` address.
 
 ## Keep these private
 | File | Contains |
