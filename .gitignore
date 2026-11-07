@@ -3,3 +3,5 @@ node_modules/
 canvas-downloads/
 tests/.state/
 dist/
+.env.backup-*
+*.tmp
