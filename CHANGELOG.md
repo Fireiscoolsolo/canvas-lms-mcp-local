@@ -6,6 +6,12 @@ All notable changes to `canvas-lms-mcp-local`. The tools are shared with the Rem
 ## Unreleased
 
 ### Security
+- **A file name can't disguise what it is.** Downloads drop invisible and right-to-left characters, which could make `notes.exe` look like `notes.pdf`, and never use a name Windows keeps for devices, such as `CONIN# Changelog
+
+All notable changes to `canvas-lms-mcp-local`. The tools are shared with the Remote Edition
+([canvas-lms-mcp-remote](https://github.com/Fireiscoolsolo/canvas-lms-mcp-server)), so most tool changes appear in both changelogs.
+
+ or `COM¹`. A long name is shortened without losing its extension.
 - **Files can't be bigger than they look.** A Word or PowerPoint file is read only up to 64 MB of text inside, so a small crafted file that expands to gigabytes is refused instead of taking the server down, even when it lies about its size. `read_course_file` stops at 25 MB as the file arrives, whatever Canvas says its size is. Downloads are now written to disk as they arrive instead of being held in memory, up to 4 GB, and a failed one leaves nothing half-written.
 - **The token is never sent unencrypted.** A school address written with `http://` is now used with `https://`, and the log says so. Only a Canvas running on the same computer keeps `http://`.
 - **Your Canvas token only goes to Canvas.** Every request now passes one check, so no tool can send the token to another address, whether that address came from the model, a next-page link, a file record or an upload. Files stored on another host are fetched without it. `download_submission_attachment` only takes addresses on your Canvas. If your school uses a second address for Canvas, use that one in `CANVAS_BASE_URL`.
@@ -22,6 +28,7 @@ All notable changes to `canvas-lms-mcp-local`. The tools are shared with the Rem
 - **Fences around other people's text are harder to break.** A fake end marker is now caught in any case, with invisible characters, in full-width or look-alike brackets, or with two brackets instead of three. Text that only starts like a fence is fenced like anything else. Every tool that passes Canvas text straight through now fences the longer fields (descriptions, bodies, messages, captions, rubric and outcome text, quiz items, planner notes) wherever they appear, and text sent to Canvas is refused if it carries any spelling of a marker.
 
 ### Fixed
+- **Long lists say when they were cut short.** When a tool reads as many items as it allows and Canvas has more, the answer now starts with a heads-up, instead of silently treating the first ones as everything. A structured answer is also kept within the size limit: its longest list keeps as many items as fit, and the answer says so.
 - **A tool the app stops waiting for stops asking Canvas.** When your AI app cancels a call or the connection drops, a tool that only reads stops before its next Canvas request instead of running to the end. Anything that changes Canvas always finishes, so a submission never stops half way. A read that runs for 20 minutes is stopped and says so.
 
 ### Releases
