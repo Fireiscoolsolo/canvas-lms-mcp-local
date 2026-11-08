@@ -3,7 +3,7 @@
 All notable changes to `canvas-lms-mcp-local`. The tools are shared with the Remote Edition
 ([canvas-lms-mcp-remote](https://github.com/Fireiscoolsolo/canvas-lms-mcp-server)), so most tool changes appear in both changelogs.
 
-## Unreleased
+## 1.3.0
 
 ### Security
 - **A file name can't disguise what it is.** Downloads drop invisible and right-to-left characters, which could make `notes.exe` look like `notes.pdf`, and never use a name Windows keeps for devices, such as `CONIN# Changelog
