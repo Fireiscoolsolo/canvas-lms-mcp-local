@@ -3,6 +3,39 @@
 All notable changes to `canvas-lms-mcp-local`. The tools are shared with the Remote Edition
 ([canvas-lms-mcp-remote](https://github.com/Fireiscoolsolo/canvas-lms-mcp-server)), so most tool changes appear in both changelogs.
 
+## Unreleased
+
+### Security
+- **A file name can't disguise what it is.** Downloads drop invisible and right-to-left characters, which could make `notes.exe` look like `notes.pdf`, and never use a name Windows keeps for devices, such as `CONIN# Changelog
+
+All notable changes to `canvas-lms-mcp-local`. The tools are shared with the Remote Edition
+([canvas-lms-mcp-remote](https://github.com/Fireiscoolsolo/canvas-lms-mcp-server)), so most tool changes appear in both changelogs.
+
+ or `COM¹`. A long name is shortened without losing its extension.
+- **Files can't be bigger than they look.** A Word or PowerPoint file is read only up to 64 MB of text inside, so a small crafted file that expands to gigabytes is refused instead of taking the server down, even when it lies about its size. `read_course_file` stops at 25 MB as the file arrives, whatever Canvas says its size is. Downloads are now written to disk as they arrive instead of being held in memory, up to 4 GB, and a failed one leaves nothing half-written.
+- **The token is never sent unencrypted.** A school address written with `http://` is now used with `https://`, and the log says so. Only a Canvas running on the same computer keeps `http://`.
+- **Your Canvas token only goes to Canvas.** Every request now passes one check, so no tool can send the token to another address, whether that address came from the model, a next-page link, a file record or an upload. Files stored on another host are fetched without it. `download_submission_attachment` only takes addresses on your Canvas. If your school uses a second address for Canvas, use that one in `CANVAS_BASE_URL`.
+- **The quiz block can't be spelled around.** It now runs on the final address, for every tool and every write method.
+- **Requests stay inside the Canvas API.** A path can't climb out of `/api/v1`, and endpoints that hand out sign-in links or tokens, or add a contact method to your account, are refused.
+- **An ID can only be an ID.** A value with `/`, `\`, `?`, `#` or `%` in it is refused, so it can't turn a harmless tool into a request to a different endpoint. Canvas's own forms such as `self` and `sis_course_id:BIO-101` still work.
+- **Settings that restrict the server can't fail open.** `CANVAS_ALLOW_WRITES` now understands `false`, `0`, `no` and `off` in any case, and `CANVAS_PROFILE` ignores stray spaces. A value it can't read now means the safe choice, and every Canvas tool says what to fix instead of carrying on with everything switched on.
+- A name in `CANVAS_TOOLS` or `CANVAS_DISABLE_TOOLS` that matches nothing is now reported in the log and in `get_server_config`.
+- **Downloads stay in your download folder.** `dest_dir` can only be `CANVAS_DOWNLOAD_DIR` or a folder inside it, even through links. To save somewhere else, change `CANVAS_DOWNLOAD_DIR`.
+- **A download never replaces a file.** A different file with the same name is saved as `name (1).pdf`, and the same file isn't saved twice.
+- **Private files are never uploaded.** Uploads refuse `.env` files, keys, sign-in files, this server's settings folder, and the folders that browsers and AI apps keep their data in. Schoolwork still uploads from any other folder.
+- **Confirmation can't be skipped.** When your AI app can ask you, it now always does: `confirm=true` no longer gets around the question. Apps that can't ask get a preview with a one-time token, tied to that tool and those exact details, for 5 minutes. A submission, delete or upload is refused if the assignment, item or file changed after the preview. The token stops stale or swapped requests. It doesn't prove a person said yes, so your AI app's own approval step still matters.
+- **More actions ask first:** `upload_to_my_files`, `upload_submission_file`, `upload_comment_attachment`, `delete_planner_note`, `delete_bookmark`, `update_planner_note`, `update_calendar_event`, `rate_entry`, `create_content_export`, `export_course_archive`, and every write through `raw_canvas_request`.
+- **Fences around other people's text are harder to break.** A fake end marker is now caught in any case, with invisible characters, in full-width or look-alike brackets, or with two brackets instead of three. Text that only starts like a fence is fenced like anything else. Every tool that passes Canvas text straight through now fences the longer fields (descriptions, bodies, messages, captions, rubric and outcome text, quiz items, planner notes) wherever they appear, and text sent to Canvas is refused if it carries any spelling of a marker.
+
+### Fixed
+- **The activity stream fits in one answer.** On a real Canvas one page of it was about 200,000 characters, twice the size of an answer, because items about a grade carry the whole assignment, course and student record. The activity stream tools now keep what says what happened: the title, message, score, grade, comments, link and dates.
+- **Long lists say when they were cut short.** When a tool reads as many items as it allows and Canvas has more, the answer now starts with a heads-up, instead of silently treating the first ones as everything. A structured answer is also kept within the size limit: its longest list keeps as many items as fit, and the answer says so.
+- **A tool the app stops waiting for stops asking Canvas.** When your AI app cancels a call or the connection drops, a tool that only reads stops before its next Canvas request instead of running to the end. Anything that changes Canvas always finishes, so a submission never stops half way. A read that runs for 20 minutes is stopped and says so.
+
+### Releases
+- **A publish from GitHub checks itself first.** Every file that names the version has to agree, the changelog needs a section for it, and the shared tools have to match the other edition. The actions it uses are pinned to exact versions, and the MCP Registry publisher is a fixed release checked against its published checksum. Every test run now also fails if the shared tools differ between the two editions.
+- The number of tools written in the README, the website and the package listings is now checked against what the server registers, so it can't drift again.
+
 ## 1.2.1
 
 ### Fixed
