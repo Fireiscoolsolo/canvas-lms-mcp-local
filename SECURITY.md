@@ -8,7 +8,7 @@ Security fixes go into the newest release only, so keep it up to date. On Window
 | The newest release | Yes |
 | Anything older | No. Update first |
 
-It needs Node.js 18 or newer. Every change is tested on Node 18, 20, 22 and 24, on Windows and Linux.
+It needs Node.js 18 or newer. Every change is tested on Node 18, 20, 22 and 24, on Windows, macOS and Linux.
 
 ## Threat model
 
