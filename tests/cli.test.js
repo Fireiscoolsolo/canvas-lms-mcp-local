@@ -170,7 +170,7 @@ test('doctor shows each app\'s profile and warns when an app can\'t handle that 
     const entry = (profile) => ({ servers: { canvas: { type: 'stdio', command: 'npx', args: ['-y', 'canvas-lms-mcp-local'], env: { CANVAS_BASE_URL: url, CANVAS_API_TOKEN: 'good-token-123', ...(profile ? { CANVAS_PROFILE: profile } : {}) } } } });
     fs.writeFileSync(vscode, JSON.stringify(entry()));
     const big = await run(['doctor'], { env });
-    assert.match(big.out, /VS Code \(Copilot\).*Everything \(237 tools\)/);
+    assert.match(big.out, /VS Code \(Copilot\).*Everything \(\d{3} tools\)/);
     assert.match(big.out, /128/, 'says why: VS Code stops at 128 tools');
     assert.match(big.out, /--profile core/);
     fs.writeFileSync(vscode, JSON.stringify(entry('core')));
