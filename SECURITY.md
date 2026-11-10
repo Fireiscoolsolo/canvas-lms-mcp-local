@@ -33,6 +33,7 @@ It needs Node.js 18 or newer. Every change is tested on Node 18, 20, 22 and 24, 
 |---|---|
 | `.env` | Your Canvas access token |
 | Your MCP client's config file | Your Canvas token too, if you put it there instead of in `.env` |
+| `changes.jsonl` in the server's state folder | Which courses and items the server changed in Canvas, and when (`get_change_log`). IDs only, never what you wrote. `CANVAS_CHANGE_LOG=off` turns it off |
 
 `.env` is listed in `.gitignore`. If your token is ever exposed, delete it in *Canvas → Account → Settings → Approved Integrations*, then create a new one and put it in `.env`.
 
