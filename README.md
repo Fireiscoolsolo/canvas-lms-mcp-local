@@ -128,6 +128,8 @@ The extension includes everything it needs, so you don't have to install Node.js
    }
    ```
 
+   **On a Mac**, an app opened from the Dock may not find `npx`. Open Terminal and run `which npx`. Use what it prints as `"command"` (for example `"/opt/homebrew/bin/npx"`), and add `"PATH": "/opt/homebrew/bin:/usr/bin:/bin"` inside `"env"`, with the folder from `which npx` first. `setup` and `print-config` do this for you.
+
 3. **Fully quit the app**: on Windows, right-click the tray icon and choose **Quit**; on macOS, press ⌘Q. Then reopen it. Closing the window isn't enough.
 </details>
 
@@ -299,7 +301,7 @@ Start with **`npx canvas-lms-mcp-local doctor`**: it checks everything below and
 | Symptom | Fix |
 |---|---|
 | Canvas tools don't appear in your app | Check that the config is valid JSON, then **fully quit** and reopen the app. `setup` writes it for you |
-| `spawn npx ENOENT` / "npx" not found | Install [Node.js](https://nodejs.org), then restart the app. If it still fails, use the full path as `command`, e.g. `"C:/Program Files/nodejs/npx.cmd"`, or use the Claude Desktop extension, which needs no Node.js |
+| `spawn npx ENOENT` / "npx" not found | Install [Node.js](https://nodejs.org), then restart the app. On a Mac, run `npx canvas-lms-mcp-local setup` again: it writes the full path to `npx` and a `PATH` the app can use. If it still fails, use the full path as `command`, e.g. `"C:/Program Files/nodejs/npx.cmd"` on Windows or the output of `which npx` on a Mac, or use the Claude Desktop extension, which needs no Node.js |
 | The first start is slow | `npx` downloads the package the first time. Later starts are fast |
 | "CANVAS_API_TOKEN is not set" | Add it to the `env` block of the `canvas` entry in your config, or run `setup`. If you run from source, check that `.env` sits next to `index.js` and isn't named `.env.txt` |
 | "Your Canvas token was rejected" | Your token expired. Create a new one (step 1) and run `setup` again |

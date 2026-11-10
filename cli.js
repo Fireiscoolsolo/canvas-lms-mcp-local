@@ -5,7 +5,7 @@ import path from 'node:path';
 import readline from 'node:readline/promises';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { APPS, PACKAGE, detect, hasCommand, serverEnv, writeEntry, readEntry, snippet } from './lib/apps.js';
+import { APPS, PACKAGE, detect, hasCommand, serverEnv, writeEntry, readEntry, snippet, restartFor } from './lib/apps.js';
 import { normalizeBase } from './core/canvas-client.js';
 import { saveStoredToken, readStoredToken, storeName } from './core/token-store.js';
 import { matchToken, daysLeft } from './core/token-watch.js';
@@ -200,7 +200,7 @@ export async function setup(opts) {
     }
     if (!done.length) return 1;
     console.log('\nNext:');
-    for (const id of done) console.log(`  - ${APPS[id].label}: ${APPS[id].restart}`);
+    for (const id of done) console.log(`  - ${APPS[id].label}: ${restartFor(id)}`);
     console.log('  Then ask your AI: "What\'s due this week?"');
     if (done.includes('chatgpt')) console.log('  In the ChatGPT app, Canvas works in Codex chats.');
     return 0;
