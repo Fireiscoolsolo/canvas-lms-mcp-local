@@ -6,12 +6,7 @@ All notable changes to `canvas-lms-mcp-local`. The tools are shared with the Rem
 ## 1.3.0
 
 ### Security
-- **A file name can't disguise what it is.** Downloads drop invisible and right-to-left characters, which could make `notes.exe` look like `notes.pdf`, and never use a name Windows keeps for devices, such as `CONIN# Changelog
-
-All notable changes to `canvas-lms-mcp-local`. The tools are shared with the Remote Edition
-([canvas-lms-mcp-remote](https://github.com/Fireiscoolsolo/canvas-lms-mcp-server)), so most tool changes appear in both changelogs.
-
- or `COM¹`. A long name is shortened without losing its extension.
+- **A file name can't disguise what it is.** Downloads drop invisible and right-to-left characters, which could make `notes.exe` look like `notes.pdf`, and never use a name Windows keeps for devices, such as `CONIN$` or `COM¹`. A long name is shortened without losing its extension.
 - **Files can't be bigger than they look.** A Word or PowerPoint file is read only up to 64 MB of text inside, so a small crafted file that expands to gigabytes is refused instead of taking the server down, even when it lies about its size. `read_course_file` stops at 25 MB as the file arrives, whatever Canvas says its size is. Downloads are now written to disk as they arrive instead of being held in memory, up to 4 GB, and a failed one leaves nothing half-written.
 - **The token is never sent unencrypted.** A school address written with `http://` is now used with `https://`, and the log says so. Only a Canvas running on the same computer keeps `http://`.
 - **Your Canvas token only goes to Canvas.** Every request now passes one check, so no tool can send the token to another address, whether that address came from the model, a next-page link, a file record or an upload. Files stored on another host are fetched without it. `download_submission_attachment` only takes addresses on your Canvas. If your school uses a second address for Canvas, use that one in `CANVAS_BASE_URL`.
