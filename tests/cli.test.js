@@ -121,6 +121,68 @@ test('setup stops on a bad token and never writes anything', async () => {
   }
 });
 
+test('setup --profile writes the profile by name, and full needs no line', async () => {
+  const { server, url } = await fakeCanvas();
+  const { dir, env } = fakeHome();
+  try {
+    const cursor = path.join(dir, '.cursor', 'mcp.json');
+    const r = await run(['setup', '--url', url, '--token-stdin', '--apps', 'cursor', '--store', 'config', '--profile', '3', '--yes'], { env, input: 'good-token-123\n' });
+    assert.equal(r.code, 0, r.out);
+    assert.equal(JSON.parse(fs.readFileSync(cursor, 'utf8')).mcpServers.canvas.env.CANVAS_PROFILE, 'study');
+    const full = await run(['setup', '--url', url, '--token-stdin', '--apps', 'cursor', '--store', 'config', '--profile', 'full', '--yes'], { env, input: 'good-token-123\n' });
+    assert.equal(full.code, 0, full.out);
+    assert.equal(JSON.parse(fs.readFileSync(cursor, 'utf8')).mcpServers.canvas.env.CANVAS_PROFILE, undefined);
+  } finally {
+    server.close();
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('setup --profile with a name nobody can read stops before writing anything', async () => {
+  const { server, url } = await fakeCanvas();
+  const { dir, env } = fakeHome();
+  try {
+    const r = await run(['setup', '--url', url, '--token-stdin', '--apps', 'cursor', '--store', 'config', '--profile', 'nope', '--yes'], { env, input: 'good-token-123\n' });
+    assert.equal(r.code, 1);
+    assert.match(r.out, /isn't a tool profile/);
+    assert.match(r.out, /essentials/);
+    assert.ok(!fs.existsSync(path.join(dir, '.cursor', 'mcp.json')));
+  } finally {
+    server.close();
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
+test('print-config --profile adds the line', async () => {
+  const r = await run(['print-config', 'cursor', '--profile', 'grades']);
+  assert.equal(JSON.parse(r.out.slice(r.out.indexOf('{'), r.out.lastIndexOf('}') + 1)).mcpServers.canvas.env.CANVAS_PROFILE, 'grades');
+  assert.equal((await run(['print-config', 'cursor', '--profile', '9'])).code, 1);
+});
+
+test('doctor shows each app\'s profile and warns when an app can\'t handle that many tools', async () => {
+  const { server, url } = await fakeCanvas();
+  const { dir, env } = fakeHome();
+  try {
+    const vscode = process.platform === 'win32' ? path.join(env.APPDATA, 'Code', 'User', 'mcp.json')
+      : process.platform === 'darwin' ? path.join(dir, 'Library', 'Application Support', 'Code', 'User', 'mcp.json')
+        : path.join(env.XDG_CONFIG_HOME, 'Code', 'User', 'mcp.json');
+    fs.mkdirSync(path.dirname(vscode), { recursive: true });
+    const entry = (profile) => ({ servers: { canvas: { type: 'stdio', command: 'npx', args: ['-y', 'canvas-lms-mcp-local'], env: { CANVAS_BASE_URL: url, CANVAS_API_TOKEN: 'good-token-123', ...(profile ? { CANVAS_PROFILE: profile } : {}) } } } });
+    fs.writeFileSync(vscode, JSON.stringify(entry()));
+    const big = await run(['doctor'], { env });
+    assert.match(big.out, /VS Code \(Copilot\).*Everything \(237 tools\)/);
+    assert.match(big.out, /128/, 'says why: VS Code stops at 128 tools');
+    assert.match(big.out, /--profile core/);
+    fs.writeFileSync(vscode, JSON.stringify(entry('core')));
+    const fine = await run(['doctor'], { env });
+    assert.match(fine.out, /Core \(49 tools\)/);
+    assert.doesNotMatch(fine.out, /128/);
+  } finally {
+    server.close();
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+});
+
 test('broken app settings are reported, not overwritten', async () => {
   const { server, url } = await fakeCanvas();
   const { dir, env } = fakeHome();

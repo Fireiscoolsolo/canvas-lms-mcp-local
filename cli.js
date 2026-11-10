@@ -11,6 +11,7 @@ import { saveStoredToken, readStoredToken, storeName } from './core/token-store.
 import { matchToken, daysLeft } from './core/token-watch.js';
 import { ipFamilyFrom } from './core/config.js';
 import { applyNetworkSettings, reportConnections } from './core/network.js';
+import { PROFILES, resolveProfile, profileIncludes, profileChoices, isUnset } from './core/profiles.js';
 
 const DIR = path.dirname(fileURLToPath(import.meta.url));
 const VERSION = JSON.parse(fs.readFileSync(path.join(DIR, 'package.json'), 'utf8')).version;
@@ -29,6 +30,7 @@ setup options, to answer the questions up front:
   --token-stdin               read the token from standard input instead of asking
   --apps <list>               comma-separated, e.g. claude,chatgpt,cursor
   --store keychain|config     keep the token in ${storeName()} (keychain) or in each app's settings (config)
+  --profile <name or number>  which tools to turn on: ${profileChoices()} (default: full)
   --yes                       replace existing Canvas entries without asking
 
 Apps: ${Object.keys(APPS).join(', ')}
@@ -89,9 +91,29 @@ function prompter() {
 }
 
 const readStdin = async () => { let s = ''; for await (const chunk of process.stdin) s += chunk; return s.trim(); };
+
+/** The profile a --profile value names, or a readable error that lists the choices. */
+function pickProfile(value) {
+  const chosen = value === true || isUnset(value) ? null : resolveProfile(value);
+  if (!chosen) throw new Error(`"${value === true ? '' : value}" isn't a tool profile. Use one name or number: ${profileChoices()}.`);
+  return chosen;
+}
+
+let counted = null;
+/** How many tools each profile turns on, counted from the real server. Keeps CANVAS_IP_FAMILY as it was. */
+async function profileCounts() {
+  if (counted) return counted;
+  const { createCanvasServer } = await import('./core/index.js');
+  const built = createCanvasServer({ env: { CANVAS_IP_FAMILY: process.env.CANVAS_IP_FAMILY || '' }, version: VERSION });
+  const all = [...built.registry, ...built.leftOut];
+  counted = Object.fromEntries(PROFILES.map((p) => [p.id, all.filter((t) => profileIncludes(p, t)).length]));
+  return counted;
+}
 const storeUsable = () => process.platform === 'win32' || (process.platform === 'darwin' ? hasCommand('security') : hasCommand('secret-tool'));
 
 export async function setup(opts) {
+  // Checked before anything else, so a profile nobody can read stops setup before it asks or writes anything.
+  const fixed = opts.profile !== undefined ? pickProfile(opts.profile) : null;
   const io = opts.tokenStdin && opts.url && opts.apps ? null : prompter();
   try {
     console.log(`Canvas LMS setup (${PACKAGE} ${VERSION})\n`);
@@ -129,6 +151,23 @@ export async function setup(opts) {
       if (!chosen.length) throw new Error('No apps picked.');
     }
 
+    // Which tools each app gets. Scripted runs keep every tool unless --profile says otherwise.
+    let profileFor = () => fixed?.id || 'full';
+    if (!fixed && io) {
+      const counts = await profileCounts();
+      console.log('\nWhich tools should Canvas turn on? Fewer tools help some apps pick the right one. You can change this later.');
+      for (const p of PROFILES) console.log(`  ${p.number}. ${p.id.padEnd(10)} ${String(counts[p.id]).padStart(3)} tools  ${p.summary}`);
+      console.log(`Suggested: ${chosen.map((id) => `${APPS[id].label}: ${APPS[id].suggest}`).join(', ')}`);
+      for (let tries = 0; ; tries++) {
+        const answer = (await io.ask('Press Enter for the suggestions, or type one name or number for every app: ')).trim();
+        if (!answer) { profileFor = (id) => APPS[id].suggest || 'full'; break; }
+        const p = resolveProfile(answer);
+        if (p) { profileFor = () => p.id; break; }
+        console.log(`"${answer}" isn't a tool profile. Use one name or number: ${profileChoices()}.`);
+        if (tries >= 2) throw new Error('Setup stopped because no tool profile was picked.');
+      }
+    }
+
     let useStore = opts.store === 'keychain';
     if (!opts.store && io && storeUsable()) {
       useStore = !/^n/i.test((await io.ask(`\nKeep the token in ${storeName()} instead of in each app's settings file? It's safer. [Y/n]: `)).trim());
@@ -138,7 +177,7 @@ export async function setup(opts) {
       if (readStoredToken() !== token) throw new Error(`The token didn't save in ${storeName()}. Run setup again and answer "n" to keep it in the app settings instead.`);
       console.log(`✔ Token saved in ${storeName()}.`);
     }
-    const env = serverEnv({ baseUrl: base, token, useStore });
+    const envFor = (id) => serverEnv({ baseUrl: base, token, useStore, profile: profileFor(id) });
 
     console.log('');
     const done = [];
@@ -152,8 +191,8 @@ export async function setup(opts) {
           console.log(`- ${app.label}: left as it was.`);
           continue;
         }
-        const r = writeEntry(id, env);
-        console.log(`✔ ${app.label}: Canvas added${r.backup ? ` (old settings backed up to ${r.backup})` : ''}.`);
+        const r = writeEntry(id, envFor(id));
+        console.log(`✔ ${app.label}: Canvas added with the ${profileFor(id)} tools${r.backup ? ` (old settings backed up to ${r.backup})` : ''}.`);
         done.push(id);
       } catch (e) {
         console.log(`✖ ${app.label}: ${e.message}`);
@@ -200,7 +239,18 @@ export async function doctor({ fetchImpl = fetch } = {}) {
     if (!entry) { note(`${app.label}: installed, Canvas not set up (npx ${PACKAGE} setup)`); continue; }
     const ours = JSON.stringify(entry).includes(PACKAGE);
     good(`${app.label}: Canvas is set up${ours ? '' : ' (with a different Canvas server)'} in ${where}`);
-    if (ours) sources.push({ label: app.label, env: entry.env || {} });
+    if (ours) {
+      sources.push({ label: app.label, env: entry.env || {} });
+      const set = entry.env?.CANVAS_PROFILE;
+      const profile = resolveProfile(set);
+      const count = (await profileCounts())[profile?.id];
+      if (!profile) bad(`${app.label}: CANVAS_PROFILE is "${set}", which this version can't read, so its Canvas tools stop`, `Use one name or number: ${profileChoices()}, or run: npx ${PACKAGE} setup --apps ${id}`);
+      else note(`${app.label}: tools: ${profile.title} (${count} tools)`);
+      if (profile && app.limit && count > app.limit) {
+        problems++;
+        warn(`${app.label} can only use ${app.limit} tools, so ${count} is too many. Pick a smaller profile: npx ${PACKAGE} setup --apps ${id} --profile ${app.suggest}`);
+      }
+    }
   }
   if (process.env.CANVAS_API_TOKEN || process.env.CANVAS_BASE_URL) sources.push({ label: 'environment variables', env: process.env });
 
@@ -238,7 +288,8 @@ export async function doctor({ fetchImpl = fetch } = {}) {
 export function printConfig(opts) {
   const id = opts._[1] || 'claude';
   if (!APPS[id]) { console.error(`Unknown app: ${id}. Choose from ${Object.keys(APPS).join(', ')}.`); return 1; }
-  const env = serverEnv({ baseUrl: opts.url ? normalizeBase(opts.url) : 'https://yourschool.instructure.com', token: 'paste-your-canvas-token-here', useStore: opts.store === 'keychain' });
+  const profile = opts.profile !== undefined ? pickProfile(opts.profile).id : 'full';
+  const env = serverEnv({ baseUrl: opts.url ? normalizeBase(opts.url) : 'https://yourschool.instructure.com', token: 'paste-your-canvas-token-here', useStore: opts.store === 'keychain', profile });
   const app = APPS[id];
   const where = app.kind === 'cli' ? 'Run this in a terminal:' : `Add this to ${detect(id).files[0]}${app.kind === 'json' ? ' (merge it with what is already there)' : ''}:`;
   console.log(`${app.label}. ${where}\n\n${snippet(id, env)}\n`);
