@@ -349,6 +349,14 @@ Environment variables  CANVAS_API_TOKEN = your_token_here
     <tr><td>6</td><td><code>full</code></td><td>Every tool. The default.</td><td>242</td></tr>
   </table></div>
   <!-- profiles:end -->
+  <p class="sub" style="margin-top:18px"><b>Change which tools are on, app by app.</b> Use the name of the set you want in place of <code>study</code>, then restart the app.</p>
+  <ul class="sub">
+    <li><b>Claude Desktop, Cursor, VS Code, Windsurf, Gemini CLI, LM Studio:</b> add <code>"CANVAS_PROFILE": "study"</code> inside <code>"env"</code> in the <code>canvas</code> entry.</li>
+    <li><b>ChatGPT desktop app:</b> add <code>CANVAS_PROFILE = "study"</code> under <code>[mcp_servers.canvas.env]</code> in <code>config.toml</code>, or in the app: Settings → Plugins → MCPs, edit canvas, + Add environment variable.</li>
+    <li><b>Claude Code:</b> <code>npx canvas-lms-mcp-local setup --apps claude-code --profile study</code></li>
+    <li><b>Claude Desktop extension:</b> in Claude, Settings → Extensions → Canvas LMS → Which tools to turn on.</li>
+    <li><b>Remote server:</b> <code>CANVAS_PROFILE=study</code> in <code>.env</code>, then <code>canvas-lms-mcp-remote restart</code>. Or <code>canvas-lms-mcp-remote profile study</code>.</li>
+  </ul>
 </div></section>
 
 <section id="tools"><div class="wrap">

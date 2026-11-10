@@ -232,6 +232,14 @@ Some AI apps can only handle so many tools, and small local models do better wit
 - Ask your AI app "which Canvas tools are switched off?": `search_tools` and `get_server_config` show the profile and how to switch.
 - Names other than `full` and `core` need version 1.4.0 or newer. An older version can't read them, so its tools stop and say what to fix. `npx` can keep running an old saved copy: if a new name doesn't work, use **Auto update** in the Installer Assistant, or delete the `_npx` folder inside npm's cache folder (`npm config get cache` shows where), then restart your AI app.
 
+**Change which tools are on, app by app.** Use the name of the set you want in place of `study`, then restart the app.
+
+- **Claude Desktop, Cursor, VS Code, Windsurf, Gemini CLI, LM Studio:** add `"CANVAS_PROFILE": "study"` inside `"env"` in the `canvas` entry.
+- **ChatGPT desktop app:** add `CANVAS_PROFILE = "study"` under `[mcp_servers.canvas.env]` in `config.toml`, or in the app: **Settings → Plugins → MCPs**, edit **canvas**, **+ Add environment variable**.
+- **Claude Code:** `npx canvas-lms-mcp-local setup --apps claude-code --profile study`.
+- **Claude Desktop extension:** in Claude, **Settings → Extensions → Canvas LMS → Which tools to turn on**.
+- **Remote server:** `CANVAS_PROFILE=study` in `.env`, then `canvas-lms-mcp-remote restart`. Or `canvas-lms-mcp-remote profile study`.
+
 **Which profile for which app.** These limits were checked in November 2026 and can change.
 
 | AI app | Limit on tools | Suggested profile |
