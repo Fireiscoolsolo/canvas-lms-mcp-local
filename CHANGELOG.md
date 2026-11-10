@@ -3,6 +3,31 @@
 All notable changes to `canvas-lms-mcp-local`. The tools are shared with the Remote Edition
 ([canvas-lms-mcp-remote](https://github.com/Fireiscoolsolo/canvas-lms-mcp-server)), so most tool changes appear in both changelogs.
 
+## 1.4.0
+
+### New
+- **Tool profiles.** Pick which tools your AI app sees with `CANVAS_PROFILE`, by name or number: 1 `essentials` (24 tools), 2 `core` (49, as before), 3 `study` (38), 4 `grades` (31), 5 `readonly` (177) or 6 `full` (all 242, still the default). `essentials` and `readonly` never change anything in Canvas, even with `CANVAS_ALLOW_WRITES=true`. `CANVAS_TOOLS` and `CANVAS_DISABLE_TOOLS` still narrow any profile. A value the server can't read still means `core`, and every tool says what to fix.
+- **Your AI knows which profile is on.** `search_tools` lists matching tools the profile left out and how to turn them on, `get_server_config` lists every profile with its tool count, and a prompt only shows up when every tool it uses is on.
+- **Five new tools, 242 in all:** `recent_feedback` (grades and teacher comments from the last few days, across courses), `next_module_items` (what's next in each course's modules and what's locked), `find_exams` (upcoming exams, midterms and finals, with why each was picked), `list_recent_history` (the Canvas pages you opened lately) and `get_change_log` (what the server changed in Canvas).
+- **A record of what changed.** Every change the server makes in Canvas is noted in `changes.jsonl` in its settings folder: when, which tool, the course and item IDs, and how you confirmed it. Never message text or anything Canvas sent back. `CANVAS_CHANGE_LOG=off` turns it off.
+- **Four new prompts:** *Quiz me*, *Check my draft*, *Weekly review* and *What does my feedback say?*
+- `setup --profile` and `print-config --profile`. When `setup` asks questions, it suggests a profile for each app. `doctor` shows each app's profile and warns when VS Code or Windsurf is set to more tools than it can use.
+- The Claude Desktop extension has a "Which tools to turn on" setting.
+
+### Fixed
+- **Works when an app on a Mac starts it.** An AI app opened from the Dock has a short `PATH`, so `setup` now writes the full path to `npx` and a `PATH` that includes Node. Setups on Windows are unchanged.
+- When macOS blocks Desktop, Documents or Downloads, tools say how to allow it in System Settings instead of "File not found".
+- The README and website give the right count for each tool group, and a test keeps them right.
+- A changelog sentence that a text replace had broken.
+
+### Security
+- On macOS and Linux, AI app settings that hold your token, and their backups, are readable only by you.
+- Uploads refuse the change log, and the folders where Cursor, Windsurf, ngrok, Brave, Arc and Safari keep their data on a Mac.
+- A token with a quote, backslash or line break is refused before it's saved to the macOS Keychain.
+
+### Upgrade
+Profile names other than `full` and `core` need this version. `npx` can keep running an old saved copy, so use **Auto update** in the Installer Assistant, or see "Tool profiles" in the README.
+
 ## 1.3.0
 
 ### Security
