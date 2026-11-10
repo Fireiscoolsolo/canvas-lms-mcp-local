@@ -306,6 +306,7 @@ Start with **`npx canvas-lms-mcp-local doctor`**: it checks everything below and
 | "CANVAS_API_TOKEN is not set" | Add it to the `env` block of the `canvas` entry in your config, or run `setup`. If you run from source, check that `.env` sits next to `index.js` and isn't named `.env.txt` |
 | "Your Canvas token was rejected" | Your token expired. Create a new one (step 1) and run `setup` again |
 | Your app struggles with so many tools | Pick a smaller [tool profile](#tool-profiles), e.g. `CANVAS_PROFILE=essentials` (or `1`). `CANVAS_TOOLS` narrows it further, e.g. `grades,planner,assignments` |
+| "macOS didn't let this server open…" | macOS asks before an app may open Desktop, Documents or Downloads. Open **System Settings → Privacy & Security → Files and Folders**, find your AI app and turn that folder on, or set `CANVAS_DOWNLOAD_DIR` to another folder |
 | Reading works but uploads or new connections time out | `doctor`'s Network section times DNS and tests every connection. The server works around a slow DNS lookup by itself, so if a connection still fails, look for a VPN, proxy or firewall |
 | Changes to the code don't take effect | Restart your AI app, because tool lists are loaded when it connects |
 | Where are the logs? | In your AI app's MCP log folder. Every line from this server starts with `[canvas-mcp]` |
