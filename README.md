@@ -1,5 +1,5 @@
 > [!TIP]
-> **Want it on your phone, on the web, or across several computers?** Go to the **[Remote Edition →](https://github.com/Fireiscoolsolo/canvas-lms-mcp-server)** ([website](https://fireiscoolsolo.github.io/canvas-lms-mcp-server/)). It has the same 240 tools, served over a password-protected tunnel with a status page, phone alerts and automatic failover between computers.
+> **Want it on your phone, on the web, or across several computers?** Go to the **[Remote Edition →](https://github.com/Fireiscoolsolo/canvas-lms-mcp-server)** ([website](https://fireiscoolsolo.github.io/canvas-lms-mcp-server/)). It has the same 241 tools, served over a password-protected tunnel with a status page, phone alerts and automatic failover between computers.
 
 <div align="center">
 
@@ -12,7 +12,7 @@
 
 **Use Canvas from your AI assistant on your own computer. No tunnel, no passwords, no background service.**
 
-240 tools · One-command setup · Nothing exposed to the internet
+241 tools · One-command setup · Nothing exposed to the internet
 
 [![npm](https://img.shields.io/npm/v/canvas-lms-mcp-local?logo=npm&color=CB3837)](https://www.npmjs.com/package/canvas-lms-mcp-local)
 [![npm downloads](https://img.shields.io/npm/dt/canvas-lms-mcp-local?label=npm%20downloads&logo=npm&color=CB3837)](https://www.npmjs.com/package/canvas-lms-mcp-local)
@@ -65,7 +65,7 @@
 
 ```
  Your AI app (MCP client)      ──stdio──►  node index.js  ──HTTPS──►  your school's Canvas API
-        (starts the server)              (240 tools, runs only
+        (starts the server)              (241 tools, runs only
                                           while your app is open)
 ```
 
@@ -219,8 +219,8 @@ Some AI apps can only handle so many tools, and small local models do better wit
 | 2 | `core` | A bit of everything, including turning in work and sending messages. | 49 |
 | 3 | `study` | Planning your week and studying: planner, calendar, study plans, course files and pages. | 38 |
 | 4 | `grades` | Grades and feedback: scores, what-if, what you need on the final, rubrics and comments. | 31 |
-| 5 | `readonly` | Everything that only looks. Nothing in Canvas can change. | 175 |
-| 6 | `full` | Every tool. The default. | 240 |
+| 5 | `readonly` | Everything that only looks. Nothing in Canvas can change. | 176 |
+| 6 | `full` | Every tool. The default. | 241 |
 <!-- profiles:end -->
 
 - Not set means `full`: every tool, as before.
