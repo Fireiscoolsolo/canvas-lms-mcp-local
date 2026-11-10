@@ -39,6 +39,7 @@ jobs:
           git clone --quiet --depth 1 --branch "$REF" https://github.com/Fireiscoolsolo/canvas-lms-mcp-server.git ../other
           node scripts/sync-core.mjs --check ../other
           cmp scripts/release-check.mjs ../other/scripts/release-check.mjs
+          cmp scripts/profile-table.mjs ../other/scripts/profile-table.mjs
 
   audit:
     runs-on: ubuntu-latest

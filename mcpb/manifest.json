@@ -26,7 +26,8 @@
       "env": {
         "CANVAS_BASE_URL": "${user_config.canvas_url}",
         "CANVAS_API_TOKEN": "${user_config.canvas_token}",
-        "CANVAS_ALLOW_WRITES": "${user_config.allow_writes}"
+        "CANVAS_ALLOW_WRITES": "${user_config.allow_writes}",
+        "CANVAS_PROFILE": "${user_config.profile}"
       }
     }
   },
@@ -53,6 +54,13 @@
       "title": "Allow submitting, posting and sending",
       "description": "Lets Claude submit work, post in discussions and send messages, after a confirmation step. Turn off for read-only.",
       "default": true,
+      "required": false
+    },
+    "profile": {
+      "type": "string",
+      "title": "Which tools to turn on",
+      "description": "full (every tool), or a smaller set: essentials, core, study, grades or readonly. A number from 1 to 6 works too. Fewer tools can help Claude pick the right one.",
+      "default": "full",
       "required": false
     }
   },
