@@ -1,4 +1,4 @@
-// Copy the shared core (core/ and tests/core/) from this repo into the Remote Edition's repo, so the tools are
+// Copy the shared core (core/ and tests/core/, and the two scripts both repos run) from this repo into the Remote Edition's repo, so the tools are
 // written once. Run after changing anything in core/:
 //   npm run sync-core                     copies to ../canvas-lms-mcp-server
 //   npm run sync-core -- <path>           copies to another checkout
@@ -12,6 +12,8 @@ const args = process.argv.slice(2);
 const check = args.includes('--check');
 const target = path.resolve(args.find((a) => !a.startsWith('--')) || path.join(ROOT, '..', 'canvas-lms-mcp-server'));
 const FOLDERS = ['core', path.join('tests', 'core')];
+// Single files both repos keep the same. Files here are copied and checked, but never removed from the other repo.
+const FILES = [path.join('scripts', 'release-check.mjs'), path.join('scripts', 'profile-table.mjs')];
 
 if (!fs.existsSync(path.join(target, 'package.json'))) {
   console.error(`No repo at ${target}. Pass the path to canvas-lms-mcp-server.`);
@@ -39,6 +41,14 @@ for (const folder of FOLDERS) {
     console.log(`${check ? 'extra  ' : 'removed'} ${path.join(folder, f)}`);
     if (!check) fs.rmSync(path.join(to, f));
   }
+}
+for (const f of FILES) {
+  const src = fs.readFileSync(path.join(ROOT, f));
+  const dest = path.join(target, f);
+  if (fs.existsSync(dest) && Buffer.compare(src, fs.readFileSync(dest)) === 0) continue;
+  differences++;
+  console.log(`${check ? 'differs' : 'copied '} ${f}`);
+  if (!check) { fs.mkdirSync(path.dirname(dest), { recursive: true }); fs.writeFileSync(dest, src); }
 }
 console.log(differences ? `${differences} file(s) ${check ? 'differ' : 'synced'} with ${target}` : `core is identical in ${target}`);
 process.exit(check && differences ? 1 : 0);

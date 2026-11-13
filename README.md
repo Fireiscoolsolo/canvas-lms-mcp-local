@@ -1,5 +1,5 @@
 > [!TIP]
-> **Want it on your phone, on the web, or across several computers?** Go to the **[Remote Edition →](https://github.com/Fireiscoolsolo/canvas-lms-mcp-server)** ([website](https://fireiscoolsolo.github.io/canvas-lms-mcp-server/)). It has the same 237 tools, served over a password-protected tunnel with a status page, phone alerts and automatic failover between computers.
+> **Want it on your phone, on the web, or across several computers?** Go to the **[Remote Edition →](https://github.com/Fireiscoolsolo/canvas-lms-mcp-server)** ([website](https://fireiscoolsolo.github.io/canvas-lms-mcp-server/)). It has the same 242 tools, served over a password-protected tunnel with a status page, phone alerts and automatic failover between computers.
 
 <div align="center">
 
@@ -12,7 +12,7 @@
 
 **Use Canvas from your AI assistant on your own computer. No tunnel, no passwords, no background service.**
 
-237 tools · One-command setup · Nothing exposed to the internet
+242 tools · One-command setup · Nothing exposed to the internet
 
 [![npm](https://img.shields.io/npm/v/canvas-lms-mcp-local?logo=npm&color=CB3837)](https://www.npmjs.com/package/canvas-lms-mcp-local)
 [![npm downloads](https://img.shields.io/npm/dt/canvas-lms-mcp-local?label=npm%20downloads&logo=npm&color=CB3837)](https://www.npmjs.com/package/canvas-lms-mcp-local)
@@ -65,7 +65,7 @@
 
 ```
  Your AI app (MCP client)      ──stdio──►  node index.js  ──HTTPS──►  your school's Canvas API
-        (starts the server)              (237 tools, runs only
+        (starts the server)              (242 tools, runs only
                                           while your app is open)
 ```
 
@@ -127,6 +127,8 @@ The extension includes everything it needs, so you don't have to install Node.js
      }
    }
    ```
+
+   **On a Mac**, an app opened from the Dock may not find `npx`. Open Terminal and run `which npx`. Use what it prints as `"command"` (for example `"/opt/homebrew/bin/npx"`), and add `"PATH": "/opt/homebrew/bin:/usr/bin:/bin"` inside `"env"`, with the folder from `which npx` first. `setup` and `print-config` do this for you.
 
 3. **Fully quit the app**: on Windows, right-click the tray icon and choose **Quit**; on macOS, press ⌘Q. Then reopen it. Closing the window isn't enough.
 </details>
@@ -197,37 +199,78 @@ Put settings in the `env` block of your config, as in step 2. If you run from so
 | `CANVAS_TOKEN_STORE` | | — | *Or* `keychain`: read the token from Windows Credential Manager, the macOS Keychain or the Linux keyring (`setup` saves it there) |
 | `CANVAS_BASE_URL` | Yes | — | e.g. `https://yourschool.instructure.com` |
 | `CANVAS_ALLOW_WRITES` | | `true` | `false` (or `0`, `no`, `off`) = nothing in Canvas can change. A value it can't read counts as `false`, and tools say so |
-| `CANVAS_PROFILE` | | `full` | `core` = curated subset of about 50 tools. A value it can't read counts as `core` |
+| `CANVAS_PROFILE` | | `full` | Which tools to turn on, by name or number: see [Tool profiles](#tool-profiles). A value it can't read counts as `core`, and tools say what to fix |
 | `CANVAS_TOOLS` | | all | Only these tool groups or tools, e.g. `grades,planner,whoami` (for apps that struggle with many tools) |
 | `CANVAS_DISABLE_TOOLS` | | — | Leave out these tool groups or tools, e.g. `inbox,groups` |
 | `CANVAS_CACHE_TTL` | | `60` | Response cache time in seconds |
 | `CANVAS_TIMEZONE` | | system | IANA time zone for dates |
 | `CANVAS_DOWNLOAD_DIR` | | `Downloads/Canvas` in your home folder | Where download tools save files. They can't save anywhere outside it |
 | `CANVAS_MAX_RESPONSE_CHARS` | | `100000` | Longest answer before it is trimmed |
+| `CANVAS_CHANGE_LOG` | | `on` | `off` stops keeping the list of what the server changed in Canvas (`get_change_log`). It keeps IDs only, never what you wrote |
 | `CANVAS_IP_FAMILY` | | both | `4` or `6` uses only that kind of address. Worth trying if new connections time out |
 
 \* One of `CANVAS_API_TOKEN`, `CANVAS_API_TOKEN_FILE` or `CANVAS_TOKEN_STORE`.
+
+### Tool profiles
+
+Some AI apps can only handle so many tools, and small local models do better with fewer. A profile turns on just the tools for one kind of work. Put its name or number in the `env` block, such as `"CANVAS_PROFILE": "study"` or `"CANVAS_PROFILE": "3"`, then restart your AI app. `setup --profile study` does it for you.
+
+<!-- profiles:start -->
+| Number | Name | What it's for | Tools |
+|:-:|---|---|:-:|
+| 1 | `essentials` | The daily basics: what's due, your grades, announcements and reading an assignment. Nothing here changes Canvas. Best for small local models. | 24 |
+| 2 | `core` | A bit of everything, including turning in work and sending messages. | 49 |
+| 3 | `study` | Planning your week and studying: planner, calendar, study plans, course files and pages. | 38 |
+| 4 | `grades` | Grades and feedback: scores, what-if, what you need on the final, rubrics and comments. | 31 |
+| 5 | `readonly` | Everything that only looks. Nothing in Canvas can change. | 177 |
+| 6 | `full` | Every tool. The default. | 242 |
+<!-- profiles:end -->
+
+- Not set means `full`: every tool, as before.
+- `CANVAS_TOOLS` and `CANVAS_DISABLE_TOOLS` narrow any profile further. They never add a tool the profile leaves out.
+- `essentials` and `readonly` never change anything in Canvas, even with `CANVAS_ALLOW_WRITES=true`. `CANVAS_ALLOW_WRITES=false` turns changes off in every profile.
+- Ask your AI app "which Canvas tools are switched off?": `search_tools` and `get_server_config` show the profile and how to switch.
+- Names other than `full` and `core` need version 1.4.0 or newer. An older version can't read them, so its tools stop and say what to fix. `npx` can keep running an old saved copy: if a new name doesn't work, use **Auto update** in the Installer Assistant, or delete the `_npx` folder inside npm's cache folder (`npm config get cache` shows where), then restart your AI app.
+
+**Change which tools are on, app by app.** Use the name of the set you want in place of `study`, then restart the app.
+
+- **Claude Desktop, Cursor, VS Code, Windsurf, Gemini CLI, LM Studio:** add `"CANVAS_PROFILE": "study"` inside `"env"` in the `canvas` entry.
+- **ChatGPT desktop app:** add `CANVAS_PROFILE = "study"` under `[mcp_servers.canvas.env]` in `config.toml`, or in the app: **Settings → Plugins → MCPs**, edit **canvas**, **+ Add environment variable**.
+- **Claude Code:** `npx canvas-lms-mcp-local setup --apps claude-code --profile study`.
+- **Claude Desktop extension:** in Claude, **Settings → Extensions → Canvas LMS → Which tools to turn on**.
+- **Remote server:** `CANVAS_PROFILE=study` in `.env`, then `canvas-lms-mcp-remote restart`. Or `canvas-lms-mcp-remote profile study`.
+
+**Which profile for which app.** These limits were checked in November 2026 and can change.
+
+| AI app | Limit on tools | Suggested profile |
+|---|---|---|
+| VS Code with Copilot | 128 in one chat request ([VS Code docs](https://code.visualstudio.com/docs/agents/run/tools)) | `core` |
+| Windsurf | 100 in total, as its docs have long said ([docs](https://docs.devin.ai/desktop/cascade/mcp)) | `core` |
+| Cursor | Older docs said only the first 40 reach the agent ([forum](https://forum.cursor.com/t/tools-limited-to-40-total/67976)) | `essentials` |
+| LM Studio | No number, but small local models run out of room with many tools ([LM Studio docs](https://lmstudio.ai/docs/app/mcp)) | `essentials` |
+| Claude Code | No fixed limit: tool search loads tools only when needed ([docs](https://code.claude.com/docs/en/mcp)) | `full` |
+| Claude Desktop, ChatGPT app, Gemini CLI | No documented limit | `full` |
 
 ## Tools
 
 | Group | Count | Highlights |
 |---|:-:|---|
-| Identity | 27 | `check_token_expiry`, notification preferences, custom-data storage |
+| Identity | 28 | `list_recent_history`, `check_token_expiry`, notification preferences, custom-data storage |
 | Courses | 17 | `course_contacts` (teachers, TAs, office hours), permissions, nicknames |
 | Assignments | 13 | `assignment_brief`, `list_missing_submissions`, `get_late_policy` |
-| Submissions | 17 | text, URL, file and annotation submission, comments, rubric assessments |
+| Submissions | 18 | `recent_feedback`, text, URL, file and annotation submission, comments, rubric assessments |
 | Grades | 15 | `final_grade_scenarios`, `what_if_grade`, `compute_needed_score`, `grade_impact_ranking`, `calculate_gpa` |
 | Quizzes | 12 | read-only: dates, attempts, reviews |
 | Discussions | 21 | `get_full_topic_view`, replies, school-wide announcements, mark announcements read |
 | Inbox | 14 | messaging, `find_recipients`, threads |
 | Calendar | 11 | events, office-hours booking |
-| Content | 36 | files, pages, modules, captions, ePortfolios, `read_course_file` for PDF, Word and PowerPoint, course export |
+| Content | 37 | `next_module_items`, files, pages, modules, captions, ePortfolios, `read_course_file` for PDF, Word and PowerPoint, course export |
 | Groups | 11 | group workspaces |
 | Rubrics | 11 | peer reviews |
 | Search | 3 | `smart_search` with keyword fallback |
 | Planner | 12 | `daily_briefing`, planner notes, `mark_planner_item_done`, `study_plan`, `export_deadlines_ics`, calendar feed |
-| Planning | 13 | `get_week_ahead`, `semester_snapshot`, `study_priority_ranking`, `semester_wrap_up`, `export_all_courses` |
-| Meta | 4 | `raw_canvas_request` for any endpoint not listed above |
+| Planning | 14 | `find_exams`, `get_week_ahead`, `semester_snapshot`, `study_priority_ranking`, `semester_wrap_up`, `export_all_courses` |
+| Meta | 5 | `get_change_log`, `raw_canvas_request` for any endpoint not listed above |
 
 Long lists come one page at a time (`limit` and `page`), dates read like "Fri, Nov 7, 11:59 PM (in 2 days)", and Canvas errors are explained with the fix. In your token's last week, answers carry a heads-up so the assistant can remind you to renew it.
 
@@ -235,7 +278,7 @@ Long lists come one page at a time (`limit` and `page`), dates read like "Fri, N
 
 The server also adds these to your AI app's menus. They don't count as tools.
 
-- **Prompts**: *Daily briefing*, *Plan my week*, *Plan my study blocks*, *What did I miss?*, *Start this assignment*, *Prep me for an exam*, *How are my grades?*, *Am I on track to pass?*, *Catch me up on a course*, *Draft an email to my professor* and *Semester wrap-up*. Each one tells the assistant which tools to use, and course names autocomplete.
+- **Prompts**: *Daily briefing*, *Plan my week*, *Plan my study blocks*, *What did I miss?*, *Start this assignment*, *Prep me for an exam*, *How are my grades?*, *Am I on track to pass?*, *Catch me up on a course*, *Draft an email to my professor*, *Semester wrap-up*, *Quiz me*, *Check my draft*, *Weekly review* and *What does my feedback say?* Each one tells the assistant which tools to use, and course names autocomplete. A prompt only shows up when the [tool profile](#tool-profiles) has every tool it uses.
 - **Attachments**: attach a course syllabus, or an assignment due in the next 14 days, to a chat the same way you'd attach a file.
 
 Apps that support MCP prompts and resources, such as Claude Desktop, show them in the **+** menu.
@@ -266,11 +309,12 @@ Start with **`npx canvas-lms-mcp-local doctor`**: it checks everything below and
 | Symptom | Fix |
 |---|---|
 | Canvas tools don't appear in your app | Check that the config is valid JSON, then **fully quit** and reopen the app. `setup` writes it for you |
-| `spawn npx ENOENT` / "npx" not found | Install [Node.js](https://nodejs.org), then restart the app. If it still fails, use the full path as `command`, e.g. `"C:/Program Files/nodejs/npx.cmd"`, or use the Claude Desktop extension, which needs no Node.js |
+| `spawn npx ENOENT` / "npx" not found | Install [Node.js](https://nodejs.org), then restart the app. On a Mac, run `npx canvas-lms-mcp-local setup` again: it writes the full path to `npx` and a `PATH` the app can use. If it still fails, use the full path as `command`, e.g. `"C:/Program Files/nodejs/npx.cmd"` on Windows or the output of `which npx` on a Mac, or use the Claude Desktop extension, which needs no Node.js |
 | The first start is slow | `npx` downloads the package the first time. Later starts are fast |
 | "CANVAS_API_TOKEN is not set" | Add it to the `env` block of the `canvas` entry in your config, or run `setup`. If you run from source, check that `.env` sits next to `index.js` and isn't named `.env.txt` |
 | "Your Canvas token was rejected" | Your token expired. Create a new one (step 1) and run `setup` again |
-| Your app struggles with so many tools | Set `CANVAS_TOOLS` to the groups you use, e.g. `grades,planner,assignments`, or `CANVAS_PROFILE=core` |
+| Your app struggles with so many tools | Pick a smaller [tool profile](#tool-profiles), e.g. `CANVAS_PROFILE=essentials` (or `1`). `CANVAS_TOOLS` narrows it further, e.g. `grades,planner,assignments` |
+| "macOS didn't let this server open…" | macOS asks before an app may open Desktop, Documents or Downloads. Open **System Settings → Privacy & Security → Files and Folders**, find your AI app and turn that folder on, or set `CANVAS_DOWNLOAD_DIR` to another folder |
 | Reading works but uploads or new connections time out | `doctor`'s Network section times DNS and tests every connection. The server works around a slow DNS lookup by itself, so if a connection still fails, look for a VPN, proxy or firewall |
 | Changes to the code don't take effect | Restart your AI app, because tool lists are loaded when it connects |
 | Where are the logs? | In your AI app's MCP log folder. Every line from this server starts with `[canvas-mcp]` |
