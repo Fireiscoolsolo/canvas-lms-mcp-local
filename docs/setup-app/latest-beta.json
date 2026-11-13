@@ -1,6 +1,21 @@
 {
-  "version": "0.4.3",
-  "url": "https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/download/v1.3.0/CanvasMCPInstallerAssistant-Setup-0.4.3.exe",
-  "notes": "The Tool guide marks exactly the tools that ask before running, and Auto update brings in the safer Local 1.3.0 and Remote 1.4.0.",
-  "sha256": "ad1b8fe22ff821ff5a1ac9fad4a1c67ebc4afe9fba702482c9b42c6f808232f7"
+  "version": "0.9.0",
+  "url": "https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/download/v1.4.0/CanvasMCPInstallerAssistant-Setup-0.9.0.exe",
+  "notes": "A beta of 1.0: choose which tools each AI app gets, five new tools, and a Mac version. Auto update brings in Local 1.4.0 and Remote 1.5.0.",
+  "sha256": "8e752c9a4856bca04a0558ba921946074ef4e58df05b68a2556417a6ac6575db",
+  "platforms": {
+    "win32": {
+      "version": "0.9.0",
+      "url": "https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/download/v1.4.0/CanvasMCPInstallerAssistant-Setup-0.9.0.exe",
+      "sha256": "8e752c9a4856bca04a0558ba921946074ef4e58df05b68a2556417a6ac6575db"
+    },
+    "darwin": {
+      "version": "0.9.0",
+      "url": "https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/download/v1.4.0/CanvasMCPInstallerAssistant-0.9.0-mac-universal.zip",
+      "sha256": "65f01316d01d16ccec6e2085ba5611f7063e1018f49c15350440bad96a61b0d6",
+      "dmg": "https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/download/v1.4.0/CanvasMCPInstallerAssistant-0.9.0-mac-universal.dmg",
+      "dmgSha256": "c3a154f7fa14a585d345dc9d2f0f680e7495b773cf64dd4f8ae02e308804c2c3",
+      "minOs": "13.0"
+    }
+  }
 }
