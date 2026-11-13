@@ -5,8 +5,11 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { spawnSync } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { entryFor, writeEntry, restartFor, APPS } from '../lib/apps.js';
+
+const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const env = { CANVAS_BASE_URL: 'https://canvas.example.edu', CANVAS_API_TOKEN: 'made-up-token' };
 const macNode = { nodeDir: '/Users/sam/.nvm/versions/node/v22.11.0/bin', exists: (p) => p === '/Users/sam/.nvm/versions/node/v22.11.0/bin/npx' };
@@ -45,6 +48,37 @@ test('with only the system folders on PATH, the entry still finds npx and npx st
   assert.ok(path.isAbsolute(e.command), e.command);
   const r = spawnSync(e.command, ['--version'], { env: { HOME: os.homedir(), PATH: e.env.PATH }, encoding: 'utf8' });
   assert.equal(r.status, 0, r.stderr);
+});
+
+test('with only that PATH, the Node it finds starts the server and lists its tools', { skip: process.platform === 'win32' && 'a Windows entry runs through cmd' }, async () => {
+  const e = entryFor('claude', env, process.platform);
+  const node = path.join(path.dirname(e.command), 'node');
+  // This repo's own server stands in for the package npx would download, so nothing goes to npm or to Canvas.
+  const child = spawn(node, [path.join(ROOT, 'index.js')], {
+    env: { HOME: os.homedir(), PATH: e.env.PATH, CANVAS_API_TOKEN: '', CANVAS_BASE_URL: '' },
+    stdio: ['pipe', 'pipe', 'ignore'],
+  });
+  try {
+    const listed = new Promise((resolve, reject) => {
+      let buf = '';
+      const timer = setTimeout(() => reject(new Error('no tools/list answer within 30 seconds')), 30000);
+      child.stdout.on('data', (d) => {
+        buf += d;
+        for (const line of buf.split('\n')) {
+          let msg = null;
+          try { msg = JSON.parse(line); } catch { /* not a whole line yet */ }
+          if (msg && msg.id === 2) { clearTimeout(timer); resolve(msg.result); }
+        }
+      });
+      child.on('exit', (code) => { clearTimeout(timer); reject(new Error(`the server stopped (code ${code})`)); });
+    });
+    const send = (m) => child.stdin.write(`${JSON.stringify({ jsonrpc: '2.0', ...m })}\n`);
+    send({ id: 1, method: 'initialize', params: { protocolVersion: '2025-06-18', capabilities: {}, clientInfo: { name: 'apps-test', version: '1' } } });
+    send({ method: 'notifications/initialized' });
+    send({ id: 2, method: 'tools/list', params: {} });
+    const result = await listed;
+    assert.ok(result.tools.length > 0, 'the server answered with its tools');
+  } finally { child.kill(); }
 });
 
 test('a config that holds the token is readable only by you on macOS and Linux, and so is its backup', { skip: process.platform === 'win32' && 'Windows file modes don\'t work this way' }, () => {
