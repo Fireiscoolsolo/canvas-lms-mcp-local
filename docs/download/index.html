@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Download Canvas MCP Installer Assistant</title>
-<meta name="description" content="Downloads the newest Canvas MCP Installer Assistant for Windows.">
+<meta name="description" content="Downloads the newest Canvas MCP Installer Assistant for Windows or Mac.">
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/png" href="../favicon.png">
 <style>
@@ -21,17 +21,33 @@ p{margin:10px 0}
 <body>
 <main>
   <img src="../icon.png" alt="" width="64" height="64">
-  <h1 style="font-size:1.4rem;margin:12px 0 6px">Your download is starting…</h1>
+  <h1 id="title" style="font-size:1.4rem;margin:12px 0 6px">Your download is starting…</h1>
   <p>If it doesn't start, <a id="direct" href="https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/latest">download it here</a>.</p>
-  <p class="muted">When it finishes, open it. If Windows says "Windows protected your PC", click <b>More info</b>, then <b>Run anyway</b>.</p>
+  <p class="muted" data-for="windows">When it finishes, open it. If Windows says "Windows protected your PC", click <b>More info</b>, then <b>Run anyway</b>.</p>
+  <div class="muted" data-for="mac" hidden>
+    <p>When it finishes, open the <b>.dmg</b> and drag the app to <b>Applications</b>, then open it from there. It works on any Mac with macOS 13 or newer.</p>
+    <p>The Mac version is a beta and isn't signed by Apple yet. The first time you open it, click <b>Done</b>, then open <b>System Settings → Privacy &amp; Security</b>, click <b>Open Anyway</b>, then <b>Open</b>, and type your Mac password.</p>
+  </div>
+  <p class="muted">Need the other one? <a href="?os=windows">Windows</a> · <a href="?os=mac">Mac (beta)</a></p>
   <p class="muted"><a href="../app/">About the app</a> · <a href="https://github.com/Fireiscoolsolo/canvas-lms-mcp-local">GitHub</a></p>
 </main>
+<script src="../setup-app/pick.js"></script>
 <script>
-// Always the newest installer: latest.json is the same file the app checks for updates.
-fetch('../setup-app/latest.json', { cache: 'no-store' })
-  .then(function (r) { return r.json(); })
-  .then(function (j) { if (j && j.url) { document.getElementById('direct').href = j.url; location.replace(j.url); } })
-  .catch(function () {});
+// Always the newest installer for this system: latest.json is the same file the app checks for updates.
+(function () {
+  var D = window.CanvasDownload;
+  var system = D.systemFor(location.search, navigator);
+  document.querySelectorAll('[data-for]').forEach(function (el) { el.hidden = el.getAttribute('data-for') !== system; });
+  fetch('../setup-app/latest.json', { cache: 'no-store' })
+    .then(function (r) { return r.json(); })
+    .then(function (j) {
+      var pick = D.pickDownload(j, system);
+      if (!pick) return;
+      document.getElementById('direct').href = pick.url;
+      location.replace(pick.url);
+    })
+    .catch(function () {});
+})();
 </script>
 </body>
 </html>
