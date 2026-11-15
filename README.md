@@ -19,7 +19,7 @@
 [![npm downloads per month](https://img.shields.io/npm/dm/canvas-lms-mcp-local?label=npm%2Fmonth&color=CB3837)](https://npm-stat.com/charts.html?package=canvas-lms-mcp-local)
 [![Release downloads](https://img.shields.io/github/downloads/Fireiscoolsolo/canvas-lms-mcp-local/total?label=release%20downloads&logo=github)](https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases)
 [![Tests](https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/actions/workflows/test.yml/badge.svg)](https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/actions/workflows/test.yml)
-[![Windows app](https://img.shields.io/badge/Windows%20app-free-5B4BDB?logo=windows&logoColor=white)](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/app/)
+[![Free app for Windows and Mac](https://img.shields.io/badge/free%20app-Windows%20%7C%20Mac-5B4BDB)](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/app/)
 [![Glama score](https://glama.ai/mcp/servers/Fireiscoolsolo/canvas-lms-mcp-local/badges/score.svg)](https://glama.ai/mcp/servers/Fireiscoolsolo/canvas-lms-mcp-local)
 [![GitHub stars](https://img.shields.io/github/stars/Fireiscoolsolo/canvas-lms-mcp-local?logo=github)](https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/stargazers)
 [![Node.js](https://img.shields.io/badge/node-%E2%89%A518-339933?logo=node.js&logoColor=white)](https://nodejs.org)
@@ -33,7 +33,7 @@
 </div>
 
 > [!TIP]
-> **On Windows? Skip the terminal.** The free **[Canvas MCP Installer Assistant](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/app/)** sets this up in Claude Desktop, the ChatGPT desktop app and other AI apps with pictures and a check after every step, or does every step for you. **[Download for Windows](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/download/)**
+> **Skip the terminal.** The free **[Canvas MCP Installer Assistant](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/app/)** sets this up in Claude Desktop, the ChatGPT desktop app and other AI apps with pictures and a check after every step, or does every step for you. For Windows, and for Mac as a beta. **[Download for Windows](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/download/?os=windows)** · **[Download for Mac](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/download/?os=mac)**
 
 <p align="center"><img src="https://fireiscoolsolo.github.io/canvas-lms-mcp-local/demo.svg" width="760" alt="Example chat: asking what score is needed on the final and what's due this week (sample data)"></p>
 
@@ -74,9 +74,9 @@ No web server, no ports, nothing to keep running. Your AI app starts the server 
 ## Quick start
 
 > [!NOTE]
-> **Rather click than type?** Download the **[Canvas MCP Installer Assistant for Windows](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/download/)**. It walks you through these steps with pictures and checks each one as you go, for both the Local and Remote editions. [See screenshots](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/app/).
+> **Rather click than type?** Download the **[Canvas MCP Installer Assistant](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/download/)** for Windows or Mac. It walks you through these steps with pictures and checks each one as you go, for both the Local and Remote editions. [See screenshots](https://fireiscoolsolo.github.io/canvas-lms-mcp-local/app/).
 >
-> Windows may show "Windows protected your PC" because the app isn't code-signed yet. Click **More info**, then **Run anyway**.
+> Windows may show "Windows protected your PC" because the app isn't code-signed yet. Click **More info**, then **Run anyway**. The Mac version is a beta and isn't signed by Apple yet: the first time you open it, click **Done**, then **Open Anyway** in **System Settings → Privacy & Security**.
 
 **You need:** [Node.js 18+](https://nodejs.org) (22+ to read PDFs) and a Canvas account.
 

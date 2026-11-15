@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Canvas MCP Installer Assistant</title>
-<meta name="description" content="A free Windows app that connects Claude or the ChatGPT desktop app to your Canvas account, with pictures and a check after every step. Then ask what's due, what you need on the final, or which missing assignment hurts your grade most.">
+<meta name="description" content="A free app for Windows and Mac that connects Claude or the ChatGPT desktop app to your Canvas account, with pictures and a check after every step. Then ask what's due, what you need on the final, or which missing assignment hurts your grade most.">
 <link rel="icon" type="image/png" href="../favicon.png">
 <link rel="apple-touch-icon" href="../icon.png">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Canvas MCP Installer Assistant: Canvas in your AI, no terminal needed">
-<meta property="og:description" content="A free Windows app that connects Claude or the ChatGPT desktop app to your Canvas account step by step. Ask what's due, what you need on the final, and more.">
+<meta property="og:description" content="A free app for Windows and Mac that connects Claude or the ChatGPT desktop app to your Canvas account step by step. Ask what's due, what you need on the final, and more.">
 <meta property="og:url" content="https://fireiscoolsolo.github.io/canvas-lms-mcp-local/app/">
 <meta property="og:image" content="https://fireiscoolsolo.github.io/canvas-lms-mcp-local/app/img/og.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -109,14 +109,15 @@ footer{border-top:1px solid var(--border);padding:36px 0;color:var(--muted);font
 </div></nav>
 
 <header class="hero"><div class="wrap">
-  <span class="pill"><span>Free Windows app · works with <b>Claude</b> and <b>ChatGPT</b></span></span>
+  <span class="pill"><span>Free app for Windows and Mac · works with <b>Claude</b> and <b>ChatGPT</b></span></span>
   <h1>Canvas in your AI,<br><span class="grad">no terminal needed.</span></h1>
   <p class="lede">The Canvas MCP Installer Assistant connects Claude or the ChatGPT desktop app to your Canvas account with pictures and a check after every step. Then just ask what's due this week, what you need on the final, or which missing assignment hurts your grade most.</p>
   <div class="cta">
-    <a class="btn primary" data-download href="https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/latest"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 17v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>Download for Windows<span class="v"></span></a>
+    <a class="btn primary" data-download data-os="windows" href="../download/?os=windows"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 17v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>Download for Windows<span class="v"></span></a>
+    <a class="btn" data-download data-os="mac" href="../download/?os=mac"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M4 17v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>Download for Mac<span class="v"></span></a>
     <a class="btn" href="#features">See how it works</a>
   </div>
-  <p class="note">Windows 10 and 11. Free guides, with an optional $5 one-click setup. It isn't code-signed yet, so if Windows says "Windows protected your PC", click <b>More info</b>, then <b>Run anyway</b>.</p>
+  <p class="note">Windows 10 and 11, or macOS 13 and newer on any Mac. Free guides, with an optional $5 one-click setup. It isn't code-signed yet, so if Windows says "Windows protected your PC", click <b>More info</b>, then <b>Run anyway</b>. The Mac version is a beta: see <a href="#mac">Does it work on a Mac?</a> for opening it the first time.</p>
   <img class="shot" src="img/welcome.webp" width="1180" height="760" alt="The app's Welcome page: choose Local or Remote for Claude or ChatGPT, with things you can ask once it works">
 </div></header>
 
@@ -179,7 +180,8 @@ footer{border-top:1px solid var(--border);padding:36px 0;color:var(--muted);font
         <li>Your setup check, server status and backups</li>
         <li>Auto remove, to take Canvas off your computer again</li>
       </ul>
-      <a class="btn primary" data-download href="https://github.com/Fireiscoolsolo/canvas-lms-mcp-local/releases/latest">Download for Windows<span class="v"></span></a>
+      <a class="btn primary" data-download data-os="windows" href="../download/?os=windows">Download for Windows<span class="v"></span></a>
+      <a class="btn" data-download data-os="mac" href="../download/?os=mac">Download for Mac<span class="v"></span></a>
     </div>
     <div class="plan">
       <span class="badge alt">$5 one-time</span>
@@ -222,7 +224,7 @@ footer{border-top:1px solid var(--border);padding:36px 0;color:var(--muted);font
   <h2>Questions</h2>
   <details><summary>Is my Canvas token safe?</summary><p>The app only sends your token to your own school's Canvas, to check that it works, and saves it on your computer in the settings the server uses. There's no tracking or analytics. The servers it installs are open source on GitHub.</p></details>
   <details><summary>Windows says "Windows protected your PC". Is that normal?</summary><p>Yes. The app isn't code-signed yet, so Windows doesn't recognize it. Click <b>More info</b>, then <b>Run anyway</b>.</p></details>
-  <details><summary>Does it work on a Mac?</summary><p>Not yet. On a Mac, follow the README for the <a href="https://github.com/Fireiscoolsolo/canvas-lms-mcp-local">Local</a> or <a href="https://github.com/Fireiscoolsolo/canvas-lms-mcp-server">Remote</a> edition.</p></details>
+  <details id="mac"><summary>Does it work on a Mac?</summary><p>Yes, as a beta: one download for Apple silicon and Intel Macs with macOS 13 or newer. It hasn't been tried on a real Mac yet, so please tell me how it goes. Open the <b>.dmg</b> and drag the app to <b>Applications</b>. It isn't signed by Apple yet, so the first time you open it, click <b>Done</b>, then open <b>System Settings → Privacy &amp; Security</b>, click <b>Open Anyway</b>, then <b>Open</b>, and type your Mac password.</p></details>
   <details><summary>Which AI apps does it set up?</summary><p>Claude Desktop and the ChatGPT desktop app for the Local Edition. For the Remote Edition, Claude on the web, desktop and phone, and the ChatGPT desktop app.</p></details>
   <details><summary>How do I remove it again?</summary><p>Open <b>Auto remove</b> in the app. It's free. It takes Canvas out of Claude Desktop or the ChatGPT app, or stops and uninstalls the Remote server, and backs up each settings file first.</p></details>
   <details><summary>Is this made by Instructure, Anthropic or OpenAI?</summary><p>No. It's an independent project that works with Canvas, Claude and ChatGPT.</p></details>
@@ -233,6 +235,7 @@ footer{border-top:1px solid var(--border);padding:36px 0;color:var(--muted);font
   Not affiliated with Instructure, Anthropic or OpenAI · <a href="mailto:fireiscoolsolo@gmail.com">fireiscoolsolo@gmail.com</a> · <a href="https://github.com/Fireiscoolsolo/canvas-lms-mcp-local">Local Edition on GitHub</a> · <a href="https://github.com/Fireiscoolsolo/canvas-lms-mcp-server">Remote Edition on GitHub</a>
 </div></footer>
 
+<script src="../setup-app/pick.js"></script>
 <script>
 (function(){
   var root=document.documentElement, btn=document.getElementById('theme');
@@ -242,12 +245,18 @@ footer{border-top:1px solid var(--border);padding:36px 0;color:var(--muted);font
     var next=cur==='dark'?'light':'dark'; root.setAttribute('data-theme',next);
     try{localStorage.setItem('theme',next);}catch(e){}
   });
-  // The download buttons always point at the newest installer, from the same file the app checks for updates.
+  // The download buttons always point at the newest installer for their system, from the same file the app checks
+  // for updates. On a Mac, the Mac button is the main one.
+  var D=window.CanvasDownload;
+  if(D&&D.isMac(navigator)) document.querySelectorAll('[data-download]').forEach(function(a){
+    a.classList.toggle('primary',a.getAttribute('data-os')==='mac');
+  });
   fetch('../setup-app/latest.json',{cache:'no-store'}).then(function(r){return r.json();}).then(function(j){
-    if(!j||!j.url) return;
     document.querySelectorAll('[data-download]').forEach(function(a){
-      a.href=j.url;
-      var v=a.querySelector('.v'); if(v) v.textContent=' (v'+j.version+')';
+      var pick=D&&D.pickDownload(j,a.getAttribute('data-os'));
+      if(!pick) return;
+      a.href=pick.url;
+      var v=a.querySelector('.v'); if(v&&pick.version) v.textContent=' (v'+pick.version+')';
     });
   }).catch(function(){});
 })();
